@@ -5,7 +5,6 @@ from diner_animation import AnimatedSprite
 
 class Customer:
     def __init__(self, table, level):
-        #self.patience_meter = 100
         self.patience_meter = 100 - (level * 5)  # Decrease patience by 5% per level
         self.order = "Spider Soup"
         self.table = table

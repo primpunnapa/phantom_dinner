@@ -149,9 +149,11 @@ class Game:
             if self.score >= 100:  # Check if the score is sufficient
                 self.ui.draw_pause_screen(self.level, self.score)  # Pause and display results
                 self.wait_for_spacebar()  # Wait for the player to press spacebar
+
                 self.level += 1
                 self.score = 0
                 self.time_left = 90  # Reset timer for the next level
+
                 self.reset_game_state()  # Reset the game state
                 print(f"Advancing to Level {self.level}!")
             else:  # Score is insufficient
