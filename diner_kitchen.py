@@ -28,13 +28,14 @@ class Kitchen:
 
     def draw(self, screen):
         """Draw the kitchen on the screen."""
-        pg.draw.rect(screen, Config.get("BEIGE"), (*self.position, Config.get("KITCHEN_SIZE"), Config.get("KITCHEN_SIZE")))
+        kitchen_rect = pg.Rect(self.position[0] + 10, self.position[1] + 10, Config.get("KITCHEN_SIZE") // 2, Config.get("KITCHEN_SIZE") // 2)
+        pg.draw.rect(screen, Config.get("BEIGE"), kitchen_rect)
 
         if self.is_preparing:
             if self.is_dish_ready():
-                font = pg.font.Font(None, 24)
-                text = font.render("Dish ready!", True, Config.get("WHITE"))
-                screen.blit(text, (self.position[0], self.position[1] - 20))
+                # font = pg.font.Font(None, 24)
+                # text = font.render("Dish ready!", True, Config.get("WHITE"))
+                # screen.blit(text, (self.position[0], self.position[1] - 20))
                 if self.current_dish:
                     self.current_dish.draw(screen)
             else:

@@ -52,3 +52,34 @@ class UI:
         self.screen.blit(tmp, (0, 0))
 
         pg.display.update()
+
+    def draw_game_over(self, score):
+        """Display the Game Over screen and wait for the player to press spacebar."""
+        font = pg.font.Font(None, 48)
+        game_over_text = font.render("Game Over!", True, Config.get("WHITE"))
+        score_text = font.render(f"Final Score: {score}", True, Config.get("WHITE"))
+        continue_text = font.render("Press SPACE to play again", True, Config.get("WHITE"))
+
+        # Position the text
+        rect1 = game_over_text.get_rect(center=(Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2 - 50))
+        rect2 = score_text.get_rect(center=(Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2))
+        rect3 = continue_text.get_rect(center=(Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2 + 50))
+
+        # Draw the messages on the screen
+        self.screen.blit(game_over_text, rect1)
+        self.screen.blit(score_text, rect2)
+        self.screen.blit(continue_text, rect3)
+
+        # Update the display
+        pg.display.update()
+
+        # Wait for the player to press spacebar
+        waiting = True
+        while waiting:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    return False  # Quit the game
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    waiting = False
+        return True  # Restart the game

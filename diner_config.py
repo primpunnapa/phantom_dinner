@@ -18,7 +18,7 @@ class Config:
         "TABLE_SIZE": 50,
         
         #kitchen
-        "KITCHEN_SIZE": 50,
+        "KITCHEN_SIZE": 100,
         
         # colors
         "BLACK": (0, 0, 0),

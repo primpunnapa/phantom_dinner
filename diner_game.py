@@ -12,6 +12,10 @@ import csv
 # Initialize Pygame
 pg.init()
 screen = pg.display.set_mode((Config.get("SCREEN_WIDTH"), Config.get("SCREEN_HEIGHT")))
+pg.display.set_caption("Phantom Diner")
+bg_image = pg.image.load('images/darkbg.jpg').convert_alpha()
+bg_image = pg.transform.scale(bg_image, (Config.get("SCREEN_WIDTH"), Config.get("SCREEN_HEIGHT")))
+
 clock = pg.time.Clock()
 FPS = 60
 
@@ -19,10 +23,10 @@ FPS = 60
 class Game:
     def __init__(self, player_name):
         self.player = Player(player_name)
-        self.tables = [Table((150, 150)), Table((350, 150)), Table((550, 150)), Table((150, 250)), Table((350, 250)), Table((550, 250))]
+        self.tables = [Table((350, 250)), Table((550, 250)), Table((350, 350)), Table((550, 350))]
         self.customers = []  # Customers currently seated at tables
         self.waiting_customers = []  # Customers waiting in line
-        self.kitchen = Kitchen((700, 300))  # Kitchen area
+        self.kitchen = Kitchen((Config.get("SCREEN_WIDTH") // 2 + 5, 90))  # Kitchen area
 
         self.time_left = 90  # 1 minute and 30 seconds
         self.run = True
@@ -158,11 +162,18 @@ class Game:
                 print(f"Advancing to Level {self.level}!")
             else:  # Score is insufficient
                 print("Game over! Score is less than 100.")
-                self.run = False  # End the game
+                if not self.ui.draw_game_over(self.score):  # Display Game Over screen
+                    self.run = False  # Quit the game if the player closes the window
+                else:
+                    # Restart the game
+                    self.level = 1
+                    self.score = 0
+                    self.time_left = 90
+                    self.reset_game_state()
 
     def draw(self):
         """Draw all game objects on the screen."""
-        self.screen.fill(Config.get("BLACK"))
+        # self.screen.fill(Config.get("BLACK"))
         for table in self.tables:
             table.draw(self.screen)
         self.player.draw(self.screen)
@@ -171,7 +182,6 @@ class Game:
         self.ui.draw_score(self.score)
         self.ui.draw_level(self.level)
         self.draw_waiting_customers()
-
 
     def wait_for_spacebar(self):
         """Wait for the player to press spacebar."""
@@ -184,6 +194,7 @@ class Game:
                     return
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     waiting = False
+
     def save_statistics(self):
         """Save the game statistics to a CSV file."""
         filename = "game_statistics.csv"
@@ -208,10 +219,14 @@ class Game:
                 self.level,
                 self.dishes_served
             ])
+
     def running(self):
         """Run the main game loop."""
         while self.run:
             clock.tick(FPS)
+
+            # draw background
+            screen.blit(bg_image, (0,0))
 
             # Handle events
             for event in pg.event.get():
