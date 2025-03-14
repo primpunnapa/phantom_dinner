@@ -10,11 +10,11 @@ class Customer:
         self.table = table
         self.arrival_time = time.time()
         self.leave_time = None
-        self.animation = AnimatedSprite("images/customer_frame", 100, scale=(0.2, 0.2))  # Scale frames to 50%
+        self.animation = AnimatedSprite("images/customer_frame", 100, scale=(0.2, 0.2))
 
     def update_patience_meter(self):
         if self.table.order_status == "waiting":
-            self.patience_meter -= 0.1
+            self.patience_meter -= 0.05
             if self.patience_meter < 0:
                 self.patience_meter = 0
 

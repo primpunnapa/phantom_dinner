@@ -7,7 +7,7 @@ class Kitchen:
     def __init__(self, pos):
         self.position = pos  # (x, y) coordinates of the kitchen
         self.is_preparing = False  # Whether a dish is being prepared
-        self.preparation_time = 5  # Time required to prepare the dish (in seconds)
+        self.preparation_time = 3  # Time required to prepare the dish (in seconds)
         self.preparation_start_time = 0  # Time when dish preparation started
         self.current_dish = None  # The dish currently being prepared
 
@@ -35,10 +35,12 @@ class Kitchen:
                 font = pg.font.Font(None, 24)
                 text = font.render("Dish ready!", True, Config.get("WHITE"))
                 screen.blit(text, (self.position[0], self.position[1] - 20))
+                if self.current_dish:
+                    self.current_dish.draw(screen)
             else:
                 font = pg.font.Font(None, 24)
                 text = font.render("Preparing...", True, Config.get("WHITE"))
                 screen.blit(text, (self.position[0], self.position[1] - 20))
 
-            if self.current_dish:
-                self.current_dish.draw(screen)
+        # if self.current_dish:
+        #     self.current_dish.draw(screen)

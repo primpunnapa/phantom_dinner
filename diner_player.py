@@ -7,6 +7,7 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.score = 0
+        self.level = 1
         self.speed = Config.get("PLAYER_SPEED")
         self.positions = [Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2]
         self.animation = AnimatedSprite("images/player_frame", 100, scale=(0.2, 0.2))
@@ -39,7 +40,13 @@ class Player:
         screen.blit(score_text1, (80, 50))
         screen.blit(score_text2, (180, 50))
 
-        # Display the customer's order above the patience meter
+        # Display level
+        score_text1 = font1.render("level : ", True, Config.get("WHITE"))
+        score_text2 = font1.render(str(self.level), True, Config.get("WHITE"))
+        screen.blit(score_text1, (Config.get("SCREEN_WIDTH") // 2 - 50, 50))
+        screen.blit(score_text2, (Config.get("SCREEN_WIDTH") // 2 + 50, 50))
+
+        # Display the name of player
         font = pg.font.Font(None, 24)
         name_text = font.render(self.name, True, Config.get("WHITE"))
         screen.blit(name_text, (self.positions[0], self.positions[1] - 30))

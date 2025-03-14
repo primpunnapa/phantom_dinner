@@ -5,7 +5,7 @@ class Config:
         "SCREEN_HEIGHT": 600,
         # player
         "PLAYER_SIZE": 50,
-        "PLAYER_SPEED": 10,
+        "PLAYER_SPEED": 6,
         "PLAYER_IMG": "images/waiter.png",
         "PATIENCE_BAR_HEIGHT": 5,
         # dish
