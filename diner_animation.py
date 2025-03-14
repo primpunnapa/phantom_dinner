@@ -11,7 +11,7 @@ class AnimatedSprite:
 
         # Load all frames from the folder
         for filename in sorted(os.listdir(folder_path)):
-            if filename.endswith(".png"):  # Ensure only PNG files are loaded
+            if filename.endswith(".png") or filename.endswith(".PNG"):  # Ensure only PNG files are loaded
                 frame = pg.image.load(os.path.join(folder_path, filename)).convert_alpha()
                 # Scale the frame if scaling is needed
                 if self.scale != (1, 1):

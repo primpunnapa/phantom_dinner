@@ -5,6 +5,9 @@ from diner_player import Player
 from diner_customer import Customer
 from diner_table import Table
 from diner_kitchen import Kitchen
+from diner_ui import UI
+import os
+import csv
 
 # Initialize Pygame
 pg.init()
@@ -20,16 +23,22 @@ class Game:
         self.customers = []  # Customers currently seated at tables
         self.waiting_customers = []  # Customers waiting in line
         self.kitchen = Kitchen((700, 300))  # Kitchen area
-        self.level = 1
+
         self.time_left = 90  # 1 minute and 30 seconds
         self.run = True
         self.last_customer_time = time.time()  # Track the last time a customer arrived
 
-    def draw_time(self, screen):
-        """Draw the remaining time on the screen."""
-        font = pg.font.Font(None, 36)
-        time_text = font.render(f"Time: {int(self.time_left)}", True, Config.get("WHITE"))
-        screen.blit(time_text, (Config.get("SCREEN_WIDTH") - 150, 50))  # Adjust position as needed
+        # statistics
+        self.score = 0
+        self.level = 1
+        self.haunt_events = 0
+        self.dishes_served = 0
+        self.waiting_times = []
+        self.player_name = player_name
+
+        # UI
+        self.screen = screen
+        self.ui = UI(screen)
 
     def reset_game_state(self):
         """Reset the game state for the next level."""
@@ -48,12 +57,13 @@ class Game:
         # Reset the player's state
         self.player.current_dish = None
         self.player.is_busy = False
+
     def place_customer(self):
         """Add a new customer to the waiting list or seat them at an available table."""
         current_time = time.time()
         if current_time - self.last_customer_time >= 5:  # 5 seconds have passed
             self.last_customer_time = current_time  # Reset the timer
-            customer = Customer(None)  # Create a new customer
+            customer = Customer(None, self.level)  # Create a new customer
             print(f"New customer arrived and is waiting in line!")
             self.waiting_customers.append(customer)  # Add to the waiting list
 
@@ -65,6 +75,7 @@ class Game:
                 customer.table = table
                 self.customers.append(customer)
                 print(f"Customer seated at table {table.position}!")
+
     def update_customers(self):
         """Update the patience meters of all customers and handle haunt events."""
         for c in self.customers:
@@ -72,7 +83,8 @@ class Game:
                 c.update_patience_meter()
                 if c.leave():
                     print("Customer left! Haunt event trigger!")
-                    self.player.score -= 10
+                    self.score -= 10
+                    self.haunt_events += 1
                     c.table.clear_table()
                     self.customers.remove(c)
             elif c.table.order_status == "served" and c.leave_time is not None:
@@ -81,12 +93,12 @@ class Game:
                     c.table.clear_table()
                     self.customers.remove(c)
 
-    def draw_waiting_customers(self, screen):
+    def draw_waiting_customers(self):
         """Draw waiting customers at the bottom of the screen."""
         x = 10
         y = Config.get("SCREEN_HEIGHT") - Config.get("CUSTOMER_SIZE") - 15
         for customer in self.waiting_customers:
-            customer.animation.draw(screen, (x, y))
+            customer.animation.draw(self.screen, (x, y))
             x += Config.get("CUSTOMER_SIZE") + 10  # Space between customers
 
     def near_kitchen(self, player):
@@ -122,20 +134,23 @@ class Game:
             if self.near_table(self.player, t) and self.player.current_dish and t.order_status == "waiting":
                 t.order_status = "served"
                 self.player.current_dish = None  # Remove dish from player
-                self.player.score += 10  # Increase score for serving a dish
-                print(f"Dish served! Score: {self.player.score}")
+                self.score += 10  # Increase score for serving a dish
+                self.dishes_served += 1  # Increment dishes served
+
+                print(f"Dish served! Score: {self.score}")
 
                 # Set a timer for customer to disappear after 3 seconds
                 t.customer.leave_time = time.time() + 3  # Store the future time
                 return
 
-    def check_level_progress(self, screen):
+    def check_level_progress(self):
         """Check if the player has achieved the minimum score to advance to the next level."""
         if self.time_left <= 0:  # Time has run out
-            if self.player.score >= 100:  # Check if the score is sufficient
-                self.pause_between_levels(screen)  # Pause and display results
-                self.player.level += 1
-                self.player.score = 0
+            if self.score >= 100:  # Check if the score is sufficient
+                self.ui.draw_pause_screen(self.level, self.score)  # Pause and display results
+                self.wait_for_spacebar()  # Wait for the player to press spacebar
+                self.level += 1
+                self.score = 0
                 self.time_left = 90  # Reset timer for the next level
                 self.reset_game_state()  # Reset the game state
                 print(f"Advancing to Level {self.level}!")
@@ -143,29 +158,21 @@ class Game:
                 print("Game over! Score is less than 100.")
                 self.run = False  # End the game
 
-    def draw(self, screen):
+    def draw(self):
         """Draw all game objects on the screen."""
-        screen.fill(Config.get("BLACK"))
+        self.screen.fill(Config.get("BLACK"))
         for table in self.tables:
-            table.draw(screen)
-        self.player.draw(screen)
-        self.kitchen.draw(screen)
-        self.draw_time(screen)  # Draw the remaining time
+            table.draw(self.screen)
+        self.player.draw(self.screen)
+        self.kitchen.draw(self.screen)
+        self.ui.draw_time(self.time_left)
+        self.ui.draw_score(self.score)
+        self.ui.draw_level(self.level)
+        self.draw_waiting_customers()
 
-    def pause_between_levels(self, screen):
-        """Pause the game between levels and wait for the player to press spacebar."""
-        font = pg.font.Font(None, 48)
-        level_text = font.render(f"Level {self.level} Complete!", True, Config.get("WHITE"))
-        score_text = font.render(f"Score: {self.player.score}", True, Config.get("WHITE"))
-        continue_text = font.render("Press SPACE to continue", True, Config.get("WHITE"))
 
-        # Draw the messages on the screen
-        screen.blit(level_text, (Config.get("SCREEN_WIDTH") // 2 - 150, Config.get("SCREEN_HEIGHT") // 2 - 50))
-        screen.blit(score_text, (Config.get("SCREEN_WIDTH") // 2 - 100, Config.get("SCREEN_HEIGHT") // 2))
-        screen.blit(continue_text, (Config.get("SCREEN_WIDTH") // 2 - 200, Config.get("SCREEN_HEIGHT") // 2 + 50))
-
-        pg.display.update()
-
+    def wait_for_spacebar(self):
+        """Wait for the player to press spacebar."""
         # Wait for the player to press spacebar
         waiting = True
         while waiting:
@@ -175,46 +182,73 @@ class Game:
                     return
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     waiting = False
+    def save_statistics(self):
+        """Save the game statistics to a CSV file."""
+        filename = "game_statistics.csv"
+        file_exists = os.path.isfile(filename)  # Check if the file already exists
+
+        with open(filename, mode="a", newline="") as file:
+            writer = csv.writer(file)
+            # Write the header if the file is new
+            if not file_exists:
+                writer.writerow(
+                    ["Player", "Score", "Waiting Time", "Haunt Events", "Level", "Dishes Served"])
+
+            # Calculate average waiting time
+            avg_waiting_time = sum(self.waiting_times) / len(self.waiting_times) if self.waiting_times else 0
+
+            # Write the current game statistics
+            writer.writerow([
+                self.player_name,
+                self.score,
+                round(avg_waiting_time, 2),  # Average waiting time
+                self.haunt_events,
+                self.level,
+                self.dishes_served
+            ])
+    def running(self):
+        """Run the main game loop."""
+        while self.run:
+            clock.tick(FPS)
+
+            # Handle events
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.run = False
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    self.handle_spacebar()  # Handle spacebar actions
+
+            # Get the state of all keys
+            keys = pg.key.get_pressed()
+
+            # Update player position based on keys pressed
+            self.player.move(keys)
+
+            # Place new customers and seat waiting customers
+            self.place_customer()
+
+            # Update customers' patience meters
+            self.update_customers()
+
+            # Check level progress
+            self.check_level_progress()
+
+            # Update timer
+            self.time_left -= 1 / 60  # Decrease time by 1 second per frame
+            if self.time_left <= 0:
+                self.check_level_progress()
+
+            # Draw game objects
+            self.draw()
+
+            # Update display
+            pg.display.update()
+
+        game.save_statistics()
+        pg.quit()
 
 # Main program
 if __name__ == "__main__":
     player_name = input("Enter your name: ")
     game = Game(player_name)
-
-    while game.run:
-        clock.tick(FPS)
-
-        # Handle events
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                game.run = False
-            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                game.handle_spacebar()  # Handle spacebar actions
-
-        # Get the state of all keys
-        keys = pg.key.get_pressed()
-
-        # Update player position based on keys pressed
-        game.player.move(keys)
-
-        # Place new customers and seat waiting customers
-        game.place_customer()
-
-        # Update customers' patience meters
-        game.update_customers()
-
-        # Check level progress
-        game.check_level_progress(screen)
-
-        # Update timer
-        game.time_left -= 1 / 60  # Decrease time by 1 second per frame
-        if game.time_left <= 0:
-            game.check_level_progress(screen)
-
-        # Draw game objects
-        game.draw(screen)
-
-        # Update display
-        pg.display.update()
-
-    pg.quit()
+    game.running()

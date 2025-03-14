@@ -42,5 +42,3 @@ class Kitchen:
                 text = font.render("Preparing...", True, Config.get("WHITE"))
                 screen.blit(text, (self.position[0], self.position[1] - 20))
 
-        # if self.current_dish:
-        #     self.current_dish.draw(screen)

@@ -6,11 +6,11 @@ from diner_animation import AnimatedSprite
 class Player:
     def __init__(self, name):
         self.name = name
-        self.score = 0
-        self.level = 1
+        # self.score = 0
+        # self.level = 1
         self.speed = Config.get("PLAYER_SPEED")
         self.positions = [Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2]
-        self.animation = AnimatedSprite("images/player_frame", 100, scale=(0.2, 0.2))
+        self.animation = AnimatedSprite("images/player_frame", 100, scale=(0.25, 0.25))
         self.is_busy = False
         self.current_dish = None
 
@@ -32,19 +32,6 @@ class Player:
     def draw(self, screen):
         self.animation.update()
         self.animation.draw(screen, self.positions)
-
-        # Display score
-        font1 = pg.font.Font(None, 36)
-        score_text1 = font1.render("score : ", True, Config.get("WHITE"))
-        score_text2 = font1.render(str(self.score), True, Config.get("WHITE"))
-        screen.blit(score_text1, (80, 50))
-        screen.blit(score_text2, (180, 50))
-
-        # Display level
-        score_text1 = font1.render("level : ", True, Config.get("WHITE"))
-        score_text2 = font1.render(str(self.level), True, Config.get("WHITE"))
-        screen.blit(score_text1, (Config.get("SCREEN_WIDTH") // 2 - 50, 50))
-        screen.blit(score_text2, (Config.get("SCREEN_WIDTH") // 2 + 50, 50))
 
         # Display the name of player
         font = pg.font.Font(None, 24)
