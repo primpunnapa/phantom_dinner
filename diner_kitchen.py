@@ -17,8 +17,8 @@ class Kitchen:
             print("Starting preparation...")
             self.is_preparing = True
             self.preparation_start_time = time.time()
-            self.current_dish = Dish("Spider Soup", self.preparation_time, (self.position[0] + 25, self.position[1] + 25))  # Create a new dish
-            print(f"Dish created at {self.current_dish.position}")
+            dish_position = (self.position[0] + Config.get("KITCHEN_SIZE") // 4, self.position[1] + Config.get("KITCHEN_SIZE") // 4)
+            self.current_dish = Dish("Spider Soup", self.preparation_time, dish_position)
 
     def is_dish_ready(self):
         """Check if the dish is ready to be picked up."""
@@ -28,7 +28,7 @@ class Kitchen:
 
     def draw(self, screen):
         """Draw the kitchen on the screen."""
-        kitchen_rect = pg.Rect(self.position[0] + 10, self.position[1] + 10, Config.get("KITCHEN_SIZE") // 2, Config.get("KITCHEN_SIZE") // 2)
+        kitchen_rect = pg.Rect(self.position[0], self.position[1], Config.get("KITCHEN_SIZE") // 2, Config.get("KITCHEN_SIZE") // 2)
         pg.draw.rect(screen, Config.get("BEIGE"), kitchen_rect)
 
         if self.is_preparing:
@@ -37,4 +37,4 @@ class Kitchen:
             else:
                 font = pg.font.Font(None, 24)
                 text = font.render("Preparing...", True, Config.get("WHITE"))
-                screen.blit(text, (self.position[0], self.position[1] - 10))
+                screen.blit(text, (self.position[0], self.position[1] - 20))

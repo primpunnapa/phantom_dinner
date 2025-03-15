@@ -82,7 +82,10 @@ class Game:
 
     def update_customers(self):
         """Update the patience meters of all customers and handle haunt events."""
-        for c in self.customers:
+        for customer in self.customers + self.waiting_customers:
+            customer.update_patience_meter()
+
+        for c in self.customers[:]:
             if c.table.order_status == "waiting":
                 c.update_patience_meter()
                 if c.leave():
@@ -91,6 +94,7 @@ class Game:
                     self.haunt_events += 1
                     c.table.clear_table()
                     self.customers.remove(c)
+
             elif c.table.order_status == "served" and c.leave_time is not None:
                 if time.time() >= c.leave_time:  # Check if 3 seconds have passed
                     print("Customer is Happy")
@@ -99,11 +103,12 @@ class Game:
 
     def draw_waiting_customers(self):
         """Draw waiting customers at the bottom of the screen."""
-        x = 10
+        x = 30
         y = Config.get("SCREEN_HEIGHT") - Config.get("CUSTOMER_SIZE") - 15
         for customer in self.waiting_customers:
-            customer.animation.draw(self.screen, (x, y))
-            x += Config.get("CUSTOMER_SIZE") + 10  # Space between customers
+            customer.position = (x, y)  # Set the position for waiting customers
+            customer.draw(self.screen)  # Draw the customer and their patience meter
+            x += Config.get("CUSTOMER_SIZE") + 30  # Space between customers
 
     def near_kitchen(self, player):
         """Check if the player is near the kitchen."""
@@ -138,15 +143,17 @@ class Game:
             if self.near_table(self.player, t) and self.player.current_dish and t.order_status == "waiting":
                 t.order_status = "served"
                 t.dish = self.player.current_dish   # Place the dish on the table
+                t.dish.position = (t.position[0] + Config.get("TABLE_SIZE") // 2, t.position[1] + Config.get("TABLE_SIZE") // 2)
                 self.player.current_dish = None     # Remove dish from player
-                self.score += 10  # Increase score for serving a dish
-                self.dishes_served += 1  # Increment dishes served
+                self.score += 10                    # Increase score for serving a dish
+                self.dishes_served += 1             # Increment dishes served
 
                 print(f"Dish served! Score: {self.score}")
 
                 # Set a timer for customer to disappear after 3 seconds
                 for chair in t.chairs:
                     if chair.customer:
+                        chair.customer.serve()
                         chair.customer.leave_time = time.time() + 3  # Store the future time
                         break
                 return

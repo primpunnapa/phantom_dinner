@@ -15,12 +15,12 @@ class Dish:
         print(f"{self.name} is ready!")
 
     def draw(self, screen):
-        """Draw the kitchen on the screen."""
-        # draw bowl
+        """Draw the dish on the screen."""
+        # Draw bowl (centered at self.position)
         pg.draw.circle(screen, Config.get("BLACK"), self.position, 12, 2)
-        # draw soup
-        border_rect = pg.Rect(self.position[0] - 10, self.position[1] - 10, 22, 12)
-        soup_rect = pg.Rect(self.position[0] - 10, self.position[1] - 10, 20, 10)
-
+        # Draw soup (centered at self.position)
+        border_rect = pg.Rect(self.position[0] - 11, self.position[1] - 12, 22, 12)
+        soup_rect = pg.Rect(self.position[0] - 10, self.position[1] - 12, 20, 10)
         pg.draw.ellipse(screen, Config.get("BLACK"), border_rect)
         pg.draw.ellipse(screen, Config.get("RED"), soup_rect)
+

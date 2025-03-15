@@ -5,16 +5,10 @@ from diner_customer import Customer
 class Table:
     def __init__(self, pos):
         self.position = pos  # (x,y)
-        # self.customer = None
         self.order_status = "empty"  # Can be "waiting", "served", or "empty"
         self.dish = None    # The dish served to the customer
         self.chairs = []    # List of chairs associated with the table
-
         self.chairs.append(Chair((pos[0] - Config.get("TABLE_SIZE"), pos[1])))  # Chair to the left of the table
-
-    # def seat_customer(self, customer: Customer):
-    #     self.customer = customer
-    #     self.order_status = "waiting"
 
     def seat_customer(self, customer):
         """Seat a customer at the table."""
@@ -25,9 +19,6 @@ class Table:
                 break
 
     def clear_table(self):
-        # self.customer = None
-        # self.order_status = "empty"
-        # self.dish = None
         self.order_status = "empty"
         self.dish = None
         for chair in self.chairs:
@@ -46,10 +37,6 @@ class Table:
         # Draw the chairs
         for chair in self.chairs:
             chair.draw(screen)
-        #
-        # # Draw the customer (if seated)
-        # if self.customer:
-        #     self.customer.draw(screen)
 
         # Draw the dish on the table if served
         if self.order_status == "served" and self.dish:
