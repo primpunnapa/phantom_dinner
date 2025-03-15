@@ -36,7 +36,7 @@ class Player:
         # Display the name of player
         font = pg.font.Font(None, 24)
         name_text = font.render(self.name, True, Config.get("WHITE"))
-        screen.blit(name_text, (self.positions[0], self.positions[1] - 30))
+        screen.blit(name_text, (self.positions[0] + 5, self.positions[1] - 20))
 
         # If holding a dish, draw it
         if self.current_dish:

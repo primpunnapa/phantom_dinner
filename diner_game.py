@@ -137,14 +137,18 @@ class Game:
         for t in self.tables:
             if self.near_table(self.player, t) and self.player.current_dish and t.order_status == "waiting":
                 t.order_status = "served"
-                self.player.current_dish = None  # Remove dish from player
+                t.dish = self.player.current_dish   # Place the dish on the table
+                self.player.current_dish = None     # Remove dish from player
                 self.score += 10  # Increase score for serving a dish
                 self.dishes_served += 1  # Increment dishes served
 
                 print(f"Dish served! Score: {self.score}")
 
                 # Set a timer for customer to disappear after 3 seconds
-                t.customer.leave_time = time.time() + 3  # Store the future time
+                for chair in t.chairs:
+                    if chair.customer:
+                        chair.customer.leave_time = time.time() + 3  # Store the future time
+                        break
                 return
 
     def check_level_progress(self):
@@ -152,7 +156,7 @@ class Game:
         if self.time_left <= 0:  # Time has run out
             if self.score >= 100:  # Check if the score is sufficient
                 self.ui.draw_pause_screen(self.level, self.score)  # Pause and display results
-                self.wait_for_spacebar()  # Wait for the player to press spacebar
+                self.wait_for_enter()  # Wait for the player to press enter
 
                 self.level += 1
                 self.score = 0
@@ -183,16 +187,15 @@ class Game:
         self.ui.draw_level(self.level)
         self.draw_waiting_customers()
 
-    def wait_for_spacebar(self):
-        """Wait for the player to press spacebar."""
-        # Wait for the player to press spacebar
+    def wait_for_enter(self):
+        """Wait for the player to press enter."""
         waiting = True
         while waiting:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
                     return
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                     waiting = False
 
     def save_statistics(self):

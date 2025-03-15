@@ -23,22 +23,34 @@ class Customer:
 
     def draw(self, screen):
         self.animation.update()
-        self.animation.draw(screen, (self.table.position[0] + 1, self.table.position[1]))
+        #self.animation.draw(screen, (self.table.position[0] + 1, self.table.position[1]))
+        # Draw the customer on their chair (if seated)
 
-        # Draw the patience meter above the customer
-        patience_bar_width = Config.get("CUSTOMER_SIZE")
-        patience_bar_rect = pg.Rect(
-            self.table.position[0],
-            self.table.position[1] - Config.get("PATIENCE_BAR_HEIGHT") - 5,
-            patience_bar_width * (self.patience_meter / 100),
-            Config.get("PATIENCE_BAR_HEIGHT")
-        )
-        pg.draw.rect(screen, Config.get("RED"), patience_bar_rect)
+        chair_position = None     # Find the chair the customer is seated on
+        for chair in self.table.chairs:
+            if chair.customer == self:
+                chair_position = chair.position
+                break
 
-        if self.table.order_status == "waiting":
-            # Display the customer's order above the patience meter
-            font = pg.font.Font(None, 24)
-            order_text = font.render(self.order, True, Config.get("WHITE"))
-            screen.blit(order_text, (self.table.position[0], self.table.position[1] - 30))
+        if chair_position:
+            # Draw the customer on their chair
+            self.animation.draw(screen, (chair_position[0] - 10, chair_position[1] - 10))
 
+            # Draw the patience meter above the customer
+            patience_bar_width = Config.get("CUSTOMER_SIZE")
+            patience_bar_rect = pg.Rect(
+                chair_position[0] - (patience_bar_width // 2) + 5,  # Center the bar above the customer
+                chair_position[1] - Config.get("PATIENCE_BAR_HEIGHT") - 3,  # Position above the customer
+                patience_bar_width * (self.patience_meter / 100),  # Width based on patience
+                Config.get("PATIENCE_BAR_HEIGHT")
+            )
+
+            pg.draw.rect(screen, Config.get("RED"), patience_bar_rect)
+            if self.table.order_status == "waiting":
+                # Display the customer's order above the patience meter
+                font = pg.font.Font(None, 24)
+                order_text = font.render(self.order, True, Config.get("WHITE"))
+                text_x = chair_position[0] - (order_text.get_width() // 2 + 5) # Center the text
+                text_y = chair_position[1] - Config.get("PATIENCE_BAR_HEIGHT") - 30  # Position above the patience bar
+                screen.blit(order_text, (text_x, text_y))
 

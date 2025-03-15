@@ -19,6 +19,9 @@ class Config:
         
         #kitchen
         "KITCHEN_SIZE": 100,
+
+        #chair
+        "CHAIR_SIZE": 30,
         
         # colors
         "BLACK": (0, 0, 0),

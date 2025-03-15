@@ -32,14 +32,9 @@ class Kitchen:
         pg.draw.rect(screen, Config.get("BEIGE"), kitchen_rect)
 
         if self.is_preparing:
-            if self.is_dish_ready():
-                # font = pg.font.Font(None, 24)
-                # text = font.render("Dish ready!", True, Config.get("WHITE"))
-                # screen.blit(text, (self.position[0], self.position[1] - 20))
-                if self.current_dish:
-                    self.current_dish.draw(screen)
+            if self.is_dish_ready() and self.current_dish:
+                self.current_dish.draw(screen)
             else:
                 font = pg.font.Font(None, 24)
                 text = font.render("Preparing...", True, Config.get("WHITE"))
-                screen.blit(text, (self.position[0], self.position[1] - 20))
-
+                screen.blit(text, (self.position[0], self.position[1] - 10))
