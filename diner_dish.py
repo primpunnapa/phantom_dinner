@@ -23,4 +23,3 @@ class Dish:
         soup_rect = pg.Rect(self.position[0] - 10, self.position[1] - 12, 20, 10)
         pg.draw.ellipse(screen, Config.get("BLACK"), border_rect)
         pg.draw.ellipse(screen, Config.get("RED"), soup_rect)
-

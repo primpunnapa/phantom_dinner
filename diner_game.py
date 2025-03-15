@@ -92,6 +92,7 @@ class Game:
                     print("Customer left! Haunt event trigger!")
                     self.score -= 10
                     self.haunt_events += 1
+                    self.waiting_times.append(time.time() - c.arrival_time)
                     c.table.clear_table()
                     self.customers.remove(c)
 
