@@ -272,8 +272,8 @@ class Game:
             # Update display
             pg.display.update()
 
-        game.save_statistics()
         pg.quit()
+        game.save_statistics()
 
 # Main program
 if __name__ == "__main__":

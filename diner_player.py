@@ -6,8 +6,6 @@ from diner_animation import AnimatedSprite
 class Player:
     def __init__(self, name):
         self.name = name
-        # self.score = 0
-        # self.level = 1
         self.speed = Config.get("PLAYER_SPEED")
         self.positions = [Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2]
         self.animation = AnimatedSprite("images/player_frame", 100, scale=(0.25, 0.25))

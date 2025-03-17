@@ -6,24 +6,62 @@ class UI:
         self.screen = screen
 
     def draw_time(self, time_left):
-        """Draw the remaining time on the screen."""
+        """Draw the remaining time on the screen with a background box."""
         font = pg.font.Font(None, 36)
         time_text = font.render(f"Time: {int(time_left)}", True, Config.get("WHITE"))
+
+        # Calculate the position and size of the background box
+        text_width, text_height = time_text.get_size()
+        box_x = Config.get("SCREEN_WIDTH") - 150 - 10  # Add padding
+        box_y = 50 - 5  # Add padding
+        box_width = text_width + 20  # Add padding
+        box_height = text_height + 10  # Add padding
+
+        # Draw the background box
+        pg.draw.rect(self.screen, Config.get("BLACK"), (box_x, box_y, box_width, box_height))
+
+        # Draw the text on top of the box
         self.screen.blit(time_text, (Config.get("SCREEN_WIDTH") - 150, 50))
 
     def draw_score(self, score):
-        """Draw the player's score on the screen."""
+        """Draw the player's score on the screen with a background box."""
         font = pg.font.Font(None, 36)
         score_text1 = font.render("SCORE : ", True, Config.get("WHITE"))
         score_text2 = font.render(str(score), True, Config.get("WHITE"))
+
+        # Calculate the position and size of the background box
+        text1_width, text1_height = score_text1.get_size()
+        text2_width, text2_height = score_text2.get_size()
+        box_x = 80 - 10  # Add padding
+        box_y = 50 - 5  # Add padding
+        box_width = text1_width + text2_width + 20  # Add padding
+        box_height = max(text1_height, text2_height) + 10  # Add padding
+
+        # Draw the background box
+        pg.draw.rect(self.screen, Config.get("BLACK"), (box_x, box_y, box_width, box_height))
+
+        # Draw the text on top of the box
         self.screen.blit(score_text1, (80, 50))
         self.screen.blit(score_text2, (200, 50))
 
     def draw_level(self, level):
-        """Draw the current level on the screen."""
+        """Draw the current level on the screen with a background box."""
         font = pg.font.Font(None, 36)
         level_text1 = font.render("LEVEL : ", True, Config.get("WHITE"))
         level_text2 = font.render(str(level), True, Config.get("WHITE"))
+
+        # Calculate the position and size of the background box
+        text1_width, text1_height = level_text1.get_size()
+        text2_width, text2_height = level_text2.get_size()
+        box_x = Config.get("SCREEN_WIDTH") // 2 - 50 - 10  # Add padding
+        box_y = 50 - 5  # Add padding
+        box_width = text1_width + text2_width + 20  # Add padding
+        box_height = max(text1_height, text2_height) + 10  # Add padding
+
+        # Draw the background box
+        pg.draw.rect(self.screen, Config.get("BLACK"), (box_x, box_y, box_width, box_height))
+
+        # Draw the text on top of the box
         self.screen.blit(level_text1, (Config.get("SCREEN_WIDTH") // 2 - 50, 50))
         self.screen.blit(level_text2, (Config.get("SCREEN_WIDTH") // 2 + 50, 50))
 
