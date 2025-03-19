@@ -32,9 +32,9 @@ class UI:
         # Calculate the position and size of the background box
         text1_width, text1_height = score_text1.get_size()
         text2_width, text2_height = score_text2.get_size()
-        box_x = 80 - 10  # Add padding
+        box_x = 80 - 5  # Add padding
         box_y = 50 - 5  # Add padding
-        box_width = text1_width + text2_width + 20  # Add padding
+        box_width = text1_width + text2_width + 30  # Add padding
         box_height = max(text1_height, text2_height) + 10  # Add padding
 
         # Draw the background box

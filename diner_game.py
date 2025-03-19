@@ -28,7 +28,7 @@ class Game:
         self.waiting_customers = []  # Customers waiting in line
         self.kitchen = Kitchen((Config.get("SCREEN_WIDTH") // 2 + 5, 90))  # Kitchen area
 
-        self.time_left = 90  # 1 minute and 30 seconds
+        self.time_left = 60  # 1 minute and 30 seconds
         self.run = True
         self.last_customer_time = time.time()  # Track the last time a customer arrived
 
@@ -163,16 +163,25 @@ class Game:
         """Check if the player has achieved the minimum score to advance to the next level."""
         if self.time_left <= 0:  # Time has run out
             if self.score >= 100:  # Check if the score is sufficient
+                self.save_statistics()
+
                 self.ui.draw_pause_screen(self.level, self.score)  # Pause and display results
                 self.wait_for_enter()  # Wait for the player to press enter
 
                 self.level += 1
                 self.score = 0
-                self.time_left = 90  # Reset timer for the next level
+                # Reset timer for the next level
+                if self.level % 2 == 0:
+                    self.time_left = 90 + 10
+                else:
+                    self.time_left = self.time_left
 
                 self.reset_game_state()  # Reset the game state
                 print(f"Advancing to Level {self.level}!")
             else:  # Score is insufficient
+
+                self.save_statistics()
+
                 print("Game over! Score is less than 100.")
                 if not self.ui.draw_game_over(self.score):  # Display Game Over screen
                     self.run = False  # Quit the game if the player closes the window
@@ -272,8 +281,10 @@ class Game:
             # Update display
             pg.display.update()
 
+
+        #game.save_statistics()
         pg.quit()
-        game.save_statistics()
+
 
 # Main program
 if __name__ == "__main__":
