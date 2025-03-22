@@ -23,9 +23,9 @@ class Kitchen:
     def is_dish_ready(self, paused):
         """Check if the dish is ready to be picked up."""
         if self.is_preparing and not paused:
-            if self.is_preparing and time.time() - self.preparation_start_time >= self.preparation_time:
+            if time.time() - self.preparation_start_time >= self.preparation_time:
                 return True
-            return False
+        return False
 
     def draw(self, screen, paused):
         """Draw the kitchen on the screen."""

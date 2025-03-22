@@ -69,6 +69,9 @@ class Game:
 
     def place_customer(self):
         """Add a new customer to the waiting list or seat them at an available table."""
+        if self.paused:
+            return
+
         current_time = time.time()
         if current_time - self.last_customer_time >= 5:  # 5 seconds have passed
             self.last_customer_time = current_time  # Reset the timer
@@ -87,25 +90,26 @@ class Game:
 
     def update_customers(self):
         """Update the patience meters of all customers and handle haunt events."""
-        for customer in self.customers + self.waiting_customers:
-            customer.update_patience_meter(self.paused)
+        if not self.paused:
+            for customer in self.customers + self.waiting_customers:
+                customer.update_patience_meter(self.paused)
 
-        for c in self.customers[:]:
-            if c.table.order_status == "waiting":
-                c.update_patience_meter(self.paused)
-                if c.leave():
-                    print("Customer left! Haunt event trigger!")
-                    self.score -= 10
-                    self.haunt_events += 1
-                    self.waiting_times.append(time.time() - c.arrival_time)
-                    c.table.clear_table()
-                    self.customers.remove(c)
+            for c in self.customers[:]:
+                if c.table.order_status == "waiting":
+                    c.update_patience_meter(self.paused)
+                    if c.leave():
+                        print("Customer left! Haunt event trigger!")
+                        self.score -= 10
+                        self.haunt_events += 1
+                        self.waiting_times.append(time.time() - c.arrival_time)
+                        c.table.clear_table()
+                        self.customers.remove(c)
 
-            elif c.table.order_status == "served" and c.leave_time is not None:
-                if not self.paused and time.time() >= c.leave_time:  # Check if 3 seconds have passed & game isn't paused
-                    print("Customer is Happy")
-                    c.table.clear_table()
-                    self.customers.remove(c)
+                elif c.table.order_status == "served" and c.leave_time is not None:
+                    if c.should_leave(self.paused):  # Check if 3 seconds have passed
+                        print("Customer is Happy")
+                        c.table.clear_table()
+                        self.customers.remove(c)
 
     def draw_waiting_customers(self):
         """Draw waiting customers at the bottom of the screen."""
@@ -130,6 +134,8 @@ class Game:
 
     def handle_spacebar(self):
         """Perform context-sensitive actions when Spacebar is pressed."""
+        if self.paused:
+            return # do nothing if the game is paused
 
         # If near the kitchen and not preparing a dish → Start cooking
         if self.near_kitchen(self.player) and not self.kitchen.is_preparing:
