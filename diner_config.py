@@ -22,6 +22,9 @@ class Config:
 
         #chair
         "CHAIR_SIZE": 30,
+
+        #pause botton
+        "BUTTON_SIZE": 40,
         
         # colors
         "BLACK": (0, 0, 0),

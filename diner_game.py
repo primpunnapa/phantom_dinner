@@ -27,10 +27,10 @@ class Game:
         self.customers = []  # Customers currently seated at tables
         self.waiting_customers = []  # Customers waiting in line
         self.kitchen = Kitchen((Config.get("SCREEN_WIDTH") // 2 + 5, 90))  # Kitchen area
-
-        self.time_left = 60  # 1 minute and 30 seconds
+        self.time_left = 60  # 1 minute
         self.run = True
         self.last_customer_time = time.time()  # Track the last time a customer arrived
+        self.paused = False
 
         # statistics
         self.score = 0
@@ -43,6 +43,11 @@ class Game:
         # UI
         self.screen = screen
         self.ui = UI(screen)
+
+    def toggle_pause(self):
+        """Toggle the pause state of the game."""
+        self.paused = not self.paused
+        print("Game Paused" if self.paused else "Game Resumed")
 
     def reset_game_state(self):
         """Reset the game state for the next level."""
@@ -83,11 +88,11 @@ class Game:
     def update_customers(self):
         """Update the patience meters of all customers and handle haunt events."""
         for customer in self.customers + self.waiting_customers:
-            customer.update_patience_meter()
+            customer.update_patience_meter(self.paused)
 
         for c in self.customers[:]:
             if c.table.order_status == "waiting":
-                c.update_patience_meter()
+                c.update_patience_meter(self.paused)
                 if c.leave():
                     print("Customer left! Haunt event trigger!")
                     self.score -= 10
@@ -97,7 +102,7 @@ class Game:
                     self.customers.remove(c)
 
             elif c.table.order_status == "served" and c.leave_time is not None:
-                if time.time() >= c.leave_time:  # Check if 3 seconds have passed
+                if not self.paused and time.time() >= c.leave_time:  # Check if 3 seconds have passed & game isn't paused
                     print("Customer is Happy")
                     c.table.clear_table()
                     self.customers.remove(c)
@@ -132,7 +137,7 @@ class Game:
             return
 
         # If near the kitchen and the dish is ready → Pick up the dish
-        if self.near_kitchen(self.player) and self.kitchen.is_dish_ready() and self.player.current_dish is None:
+        if self.near_kitchen(self.player) and self.kitchen.is_dish_ready(self.paused) and self.player.current_dish is None:
             self.player.current_dish = self.kitchen.current_dish  # Player picks up the dish
             self.kitchen.is_preparing = False  # Reset kitchen
             self.kitchen.current_dish = None  # Remove dish from kitchen
@@ -155,7 +160,7 @@ class Game:
                 for chair in t.chairs:
                     if chair.customer:
                         chair.customer.serve()
-                        chair.customer.leave_time = time.time() + 3  # Store the future time
+                        # chair.customer.leave_time = time.time() + 3  # Store the future time
                         break
                 return
 
@@ -164,24 +169,19 @@ class Game:
         if self.time_left <= 0:  # Time has run out
             if self.score >= 100:  # Check if the score is sufficient
                 self.save_statistics()
-
-                self.ui.draw_pause_screen(self.level, self.score)  # Pause and display results
+                self.ui.draw_level_complete_screen(self.level, self.score)
                 self.wait_for_enter()  # Wait for the player to press enter
 
                 self.level += 1
                 self.score = 0
                 # Reset timer for the next level
-                if self.level % 2 == 0:
-                    self.time_left = 90 + 10
-                else:
-                    self.time_left = self.time_left
+                self.time_left = 60 + (self.level // 4) * 10
 
                 self.reset_game_state()  # Reset the game state
                 print(f"Advancing to Level {self.level}!")
+
             else:  # Score is insufficient
-
                 self.save_statistics()
-
                 print("Game over! Score is less than 100.")
                 if not self.ui.draw_game_over(self.score):  # Display Game Over screen
                     self.run = False  # Quit the game if the player closes the window
@@ -189,20 +189,32 @@ class Game:
                     # Restart the game
                     self.level = 1
                     self.score = 0
-                    self.time_left = 90
+                    self.time_left = 60
                     self.reset_game_state()
 
     def draw(self):
         """Draw all game objects on the screen."""
-        # self.screen.fill(Config.get("BLACK"))
+        screen.blit(bg_image, (0, 0))
+
         for table in self.tables:
             table.draw(self.screen)
         self.player.draw(self.screen)
-        self.kitchen.draw(self.screen)
+        self.kitchen.draw(self.screen, self.paused)
         self.ui.draw_time(self.time_left)
         self.ui.draw_score(self.score)
         self.ui.draw_level(self.level)
         self.draw_waiting_customers()
+
+        # Draw the pause button
+        pause_button_rect = self.ui.draw_pause_button(self.paused)
+        if self.paused:
+            font = pg.font.Font(None, 48)
+            paused_text = font.render("Paused", True, Config.get("WHITE"))
+            text_x = Config.get("SCREEN_WIDTH") // 2 - paused_text.get_width() // 2
+            text_y = Config.get("SCREEN_HEIGHT") // 2 - paused_text.get_height() // 2
+            self.screen.blit(paused_text, (text_x, text_y))
+
+        return pause_button_rect
 
     def wait_for_enter(self):
         """Wait for the player to press enter."""
@@ -210,8 +222,8 @@ class Game:
         while waiting:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    pg.quit()
-                    return
+                    self.run = False
+                    waiting = False
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                     waiting = False
 
@@ -245,44 +257,50 @@ class Game:
         while self.run:
             clock.tick(FPS)
 
-            # draw background
-            screen.blit(bg_image, (0,0))
+            # Draw background, game objects
+            pause_button_rect = self.draw()
 
             # Handle events
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.run = False
+                    break # exit the loop immediately
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     self.handle_spacebar()  # Handle spacebar actions
+                if event.type == pg.MOUSEBUTTONDOWN:  # Handle mouse clicks
+                    if pause_button_rect.collidepoint(event.pos):  # Check if the pause button is clicked
+                        self.toggle_pause()
 
-            # Get the state of all keys
-            keys = pg.key.get_pressed()
+            # If the game is quitting, break the main loop
+            if not self.run:
+                break
 
-            # Update player position based on keys pressed
-            self.player.move(keys)
+            # Update game state if not paused
+            if not self.paused:
+                # Get the state of all keys
+                keys = pg.key.get_pressed()
 
-            # Place new customers and seat waiting customers
-            self.place_customer()
+                # Update player position based on keys pressed
+                self.player.move(keys)
 
-            # Update customers' patience meters
-            self.update_customers()
+                # Place new customers and seat waiting customers
+                self.place_customer()
 
-            # Check level progress
-            self.check_level_progress()
+                # Update customers' patience meters
+                self.update_customers()
 
-            # Update timer
-            self.time_left -= 1 / 60  # Decrease time by 1 second per frame
-            if self.time_left <= 0:
+                # Check level progress
                 self.check_level_progress()
 
-            # Draw game objects
-            self.draw()
+                # Update timer
+                self.time_left -= 1 / 60  # Decrease time by 1 second per frame
+                if self.time_left <= 0:
+                    self.check_level_progress()
 
             # Update display
             pg.display.update()
 
-
-        #game.save_statistics()
+        # Quit the game
         pg.quit()
 
 

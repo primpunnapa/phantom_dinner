@@ -14,8 +14,9 @@ class Customer:
         self.is_served = False
         self.animation = AnimatedSprite("images/customer_frame", 150, scale=(0.2, 0.2))
 
-    def update_patience_meter(self):
-        if not self.is_served:
+    def update_patience_meter(self, paused):
+        """Update the patience meter over time."""
+        if not self.is_served and not paused:
             self.patience_meter -= 0.03
             if self.patience_meter < 0:
                 self.patience_meter = 0
@@ -25,6 +26,7 @@ class Customer:
 
     def serve(self):
         self.is_served = True
+        self.leave_time = time.time() + 3
 
     def draw(self, screen):
         self.animation.update()

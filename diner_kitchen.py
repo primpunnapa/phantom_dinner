@@ -20,19 +20,20 @@ class Kitchen:
             dish_position = (self.position[0] + Config.get("KITCHEN_SIZE") // 4, self.position[1] + Config.get("KITCHEN_SIZE") // 4)
             self.current_dish = Dish("Spider Soup", self.preparation_time, dish_position)
 
-    def is_dish_ready(self):
+    def is_dish_ready(self, paused):
         """Check if the dish is ready to be picked up."""
-        if self.is_preparing and time.time() - self.preparation_start_time >= self.preparation_time:
-            return True
-        return False
+        if self.is_preparing and not paused:
+            if self.is_preparing and time.time() - self.preparation_start_time >= self.preparation_time:
+                return True
+            return False
 
-    def draw(self, screen):
+    def draw(self, screen, paused):
         """Draw the kitchen on the screen."""
         kitchen_rect = pg.Rect(self.position[0], self.position[1], Config.get("KITCHEN_SIZE") // 2, Config.get("KITCHEN_SIZE") // 2)
         pg.draw.rect(screen, Config.get("BEIGE"), kitchen_rect)
 
         if self.is_preparing:
-            if self.is_dish_ready() and self.current_dish:
+            if self.is_dish_ready(paused) and self.current_dish:
                 self.current_dish.draw(screen)
             else:
                 font = pg.font.Font(None, 24)
