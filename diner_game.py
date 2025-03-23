@@ -8,6 +8,7 @@ from diner_kitchen import Kitchen
 from diner_ui import UI
 import os
 import csv
+import sys
 
 # Initialize Pygame
 pg.init()
@@ -191,6 +192,8 @@ class Game:
                 print("Game over! Score is less than 100.")
                 if not self.ui.draw_game_over(self.score):  # Display Game Over screen
                     self.run = False  # Quit the game if the player closes the window
+                    pg.quit()
+                    sys.exit()
                 else:
                     # Restart the game
                     self.level = 1
@@ -270,7 +273,10 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.run = False
-                    break # exit the loop immediately
+                    self.save_statistics()
+                    pg.quit()
+                    sys.exit()
+                    # return  # exit the loop immediately
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     self.handle_spacebar()  # Handle spacebar actions
                 if event.type == pg.MOUSEBUTTONDOWN:  # Handle mouse clicks

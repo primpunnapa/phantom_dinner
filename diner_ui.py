@@ -8,75 +8,84 @@ class UI:
     def draw_time(self, time_left):
         """Draw the remaining time on the screen with a background box."""
         font = pg.font.Font(None, 36)
-        time_text = font.render(f"Time: {int(time_left)}", True, Config.get("WHITE"))
+        time_text = font.render(f"TIME: {int(time_left)}", True, Config.get("YELLOW"))
 
         # Calculate the position and size of the background box
         text_width, text_height = time_text.get_size()
         box_x = Config.get("SCREEN_WIDTH") - 150 - 10  # Add padding
-        box_y = 30 - 5  # Add padding
-        box_width = text_width + 20  # Add padding
-        box_height = text_height + 10  # Add padding
+        box_y = 5 - 5  # Add padding
+        box_width = text_width + 30  # Add padding
+        box_height = text_height + 20  # Add padding
 
         # Draw the background box
-        pg.draw.rect(self.screen, Config.get("BLACK"), (box_x, box_y, box_width, box_height))
+        pg.draw.rect(self.screen, Config.get("GREEN"), (box_x, box_y, box_width, box_height))
 
         # Draw the text on top of the box
-        self.screen.blit(time_text, (Config.get("SCREEN_WIDTH") - 150, 30))
+        self.screen.blit(time_text, (Config.get("SCREEN_WIDTH") - 150, 10))
 
     def draw_score(self, score):
         """Draw the player's score on the screen with a background box."""
         font = pg.font.Font(None, 36)
-        score_text1 = font.render("SCORE : ", True, Config.get("WHITE"))
-        score_text2 = font.render(str(score), True, Config.get("WHITE"))
+        score_text1 = font.render("SCORE : ", True, Config.get("YELLOW"))
+        score_text2 = font.render(str(score), True, Config.get("YELLOW"))
 
         # Calculate the position and size of the background box
         text1_width, text1_height = score_text1.get_size()
         text2_width, text2_height = score_text2.get_size()
-        box_x = 100 - 5  # Add padding
-        box_y = 30 - 5  # Add padding
-        box_width = text1_width + text2_width + 30  # Add padding
-        box_height = max(text1_height, text2_height) + 10  # Add padding
+        box_x = 140 - 5  # Add padding
+        box_y = 5 - 5  # Add padding
+        box_width = text1_width + text2_width + 50  # Add padding
+        box_height = max(text1_height, text2_height) + 20  # Add padding
 
         # Draw the background box
-        pg.draw.rect(self.screen, Config.get("BLACK"), (box_x, box_y, box_width, box_height))
+        pg.draw.rect(self.screen, Config.get("DARKPURPLE"), (box_x, box_y, box_width, box_height))
 
         # Draw the text on top of the box
-        self.screen.blit(score_text1, (130, 30))
-        self.screen.blit(score_text2, (250, 30))
+        self.screen.blit(score_text1, (150, 10))
+        self.screen.blit(score_text2, (270, 10))
 
     def draw_level(self, level):
         """Draw the current level on the screen with a background box."""
         font = pg.font.Font(None, 36)
-        level_text1 = font.render("LEVEL : ", True, Config.get("WHITE"))
-        level_text2 = font.render(str(level), True, Config.get("WHITE"))
+        level_text1 = font.render("LEVEL : ", True, Config.get("YELLOW"))
+        level_text2 = font.render(str(level), True, Config.get("YELLOW"))
 
         # Calculate the position and size of the background box
         text1_width, text1_height = level_text1.get_size()
         text2_width, text2_height = level_text2.get_size()
-        box_x = Config.get("SCREEN_WIDTH") // 2 - 50 - 10  # Add padding
-        box_y = 30 - 5  # Add padding
-        box_width = text1_width + text2_width + 20  # Add padding
-        box_height = max(text1_height, text2_height) + 10  # Add padding
+        box_x = Config.get("SCREEN_WIDTH") // 2 - 10
+        box_y = 5 - 5  # Add padding
+        box_width = text1_width + text2_width + 30  # Add padding
+        box_height = max(text1_height, text2_height) + 20  # Add padding
 
         # Draw the background box
-        pg.draw.rect(self.screen, Config.get("BLACK"), (box_x, box_y, box_width, box_height))
+        pg.draw.rect(self.screen, Config.get("DARKBLUE"), (box_x, box_y, box_width, box_height))
 
         # Draw the text on top of the box
-        self.screen.blit(level_text1, (Config.get("SCREEN_WIDTH") // 2 - 50, 30))
-        self.screen.blit(level_text2, (Config.get("SCREEN_WIDTH") // 2 + 50, 30))
+        self.screen.blit(level_text1, (Config.get("SCREEN_WIDTH") // 2, 10))
+        self.screen.blit(level_text2, (Config.get("SCREEN_WIDTH") // 2 + 100, 10))
 
     def draw_pause_button(self, paused):
         """Draw the pause button on the screen."""
-        button_rect = pg.Rect(10, 10, Config.get("BUTTON_SIZE"), Config.get("BUTTON_SIZE"))  # Position and size of the button
-        button_color = Config.get("BLUE") if not paused else Config.get("RED")  # Change color when paused
-        pg.draw.rect(self.screen, button_color, button_rect)
+        center_x = 40
+        center_y = 20
 
-        # Draw the text on the button
-        font = pg.font.Font(None, 24)
-        button_text = font.render("||" if not paused else "||", True, Config.get("WHITE"))
-        text_x = button_rect.x + (button_rect.width - button_text.get_width()) // 2
-        text_y = button_rect.y + (button_rect.height - button_text.get_height()) // 2
+        radius = Config.get("BUTTON_SIZE") // 2
+        button_color = Config.get("GREY") if not paused else Config.get("RED")
+
+        # Draw the circular button
+        pg.draw.circle(self.screen, button_color, (center_x, center_y), radius)
+
+        # Draw the pause icon ("||")
+        font = pg.font.Font(None, 36)
+        button_text = font.render("||", True, Config.get("WHITE"))
+
+        # Center the text within the circle
+        text_x = center_x - button_text.get_width() // 2
+        text_y = center_y - button_text.get_height() // 2
         self.screen.blit(button_text, (text_x, text_y))
+
+        button_rect = pg.Rect(center_x - radius, center_y - radius, radius * 2, radius * 2)
 
         return button_rect  # Return the button's rectangle for click detection
 
@@ -113,7 +122,8 @@ class UI:
         while waiting:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    pg.quit()
+                    # pg.quit()
+                    # sys.exit()
                     return False  # Quit the game
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                     waiting = False

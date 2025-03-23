@@ -5,7 +5,7 @@ from diner_animation import AnimatedSprite
 
 class Customer:
     def __init__(self, table, level):
-        self.patience_meter = 100 - (level * 5)  # Decrease patience by 5% per level
+        self.patience_meter = max(Config.get("MIN_PATIENCE"), 100 - (level * 5))
         self.order = "Spider Soup"
         self.table = table
         self.arrival_time = time.time()
@@ -29,8 +29,6 @@ class Customer:
         self.is_served = True
         self.served_time = time.time()
         self.leave_time = self.served_time + 3
-        # if not paused:
-        #     self.leave_time = time.time() + 3
 
     def should_leave(self, paused):
         if self.is_served and not paused:
