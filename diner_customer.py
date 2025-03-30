@@ -13,7 +13,7 @@ class Customer:
         self.position = None
         self.is_served = False
         self.animation = AnimatedSprite("images/customer_frame", 150, scale=(0.2, 0.2))
-        self.served_time = None # track when customer was served
+        self.served_time = None  # track when customer was served
 
     def update_patience_meter(self, paused):
         """Update the patience meter over time."""

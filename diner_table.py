@@ -1,6 +1,5 @@
 import pygame as pg
 from diner_config import Config
-from diner_customer import Customer
 
 class Table:
     def __init__(self, pos):

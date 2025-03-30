@@ -6,6 +6,7 @@ from diner_customer import Customer
 from diner_table import Table
 from diner_kitchen import Kitchen
 from diner_ui import UI
+from diner_sound import SoundEffect
 import os
 import csv
 import sys
@@ -189,6 +190,7 @@ class Game:
 
             else:  # Score is insufficient
                 self.save_statistics()
+                SoundEffect.get_instance().play_sound("over")
                 print("Game over! Score is less than 100.")
                 if not self.ui.draw_game_over(self.score):  # Display Game Over screen
                     self.run = False  # Quit the game if the player closes the window
@@ -235,6 +237,7 @@ class Game:
                     waiting = False
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                     waiting = False
+                    SoundEffect.get_instance().play_sound("press")
 
     def save_statistics(self):
         """Save the game statistics to a CSV file."""
@@ -276,12 +279,15 @@ class Game:
                     self.save_statistics()
                     pg.quit()
                     sys.exit()
-                    # return  # exit the loop immediately
+                    # exit the loop immediately
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     self.handle_spacebar()  # Handle spacebar actions
+                    SoundEffect.get_instance().play_sound("press")
+
                 if event.type == pg.MOUSEBUTTONDOWN:  # Handle mouse clicks
                     if pause_button_rect.collidepoint(event.pos):  # Check if the pause button is clicked
                         self.toggle_pause()
+                        SoundEffect.get_instance().play_sound("click")
 
             # If the game is quitting, break the main loop
             if not self.run:
@@ -315,9 +321,60 @@ class Game:
         # Quit the game
         pg.quit()
 
+def get_player_name(screen):
+    """Simple text input box to get player name."""
+    font = pg.font.Font(None, 32)
+    input_box = pg.Rect(Config.get("SCREEN_WIDTH") // 2 - 100, Config.get("SCREEN_HEIGHT") // 2 - 20, 200, 40)
+    color_inactive = pg.Color('lightskyblue3')
+    color_active = pg.Color('dodgerblue2')
+    color = color_inactive
+    active = False
+    text = ''
+    done = False
+
+    while not done:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                # Toggle active if clicked on input box
+                active = input_box.collidepoint(event.pos)
+                color = color_active if active else color_inactive
+            if event.type == pg.KEYDOWN:
+                if active:
+                    if event.key == pg.K_RETURN:
+                        done = True
+                    elif event.key == pg.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += event.unicode
+
+        screen.fill((30, 30, 30))
+        # Render the current text.
+        txt_surface = font.render(text, True, color)
+        # Resize the box if the text is too long.
+        width = max(200, txt_surface.get_width() + 10)
+        input_box.w = width
+        # Blit the text.
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        # Blit the input box rect.
+        pg.draw.rect(screen, color, input_box, 2)
+
+        # Render instructions
+        instr = font.render("Enter your name and press ENTER", True, (255, 255, 255))
+        screen.blit(instr, (
+        Config.get("SCREEN_WIDTH") // 2 - instr.get_width() // 2, Config.get("SCREEN_HEIGHT") // 2 - 60))
+
+        pg.display.flip()
+        pg.time.Clock().tick(30)
+
+    return text if text.strip() != '' else "Player"
+
 
 # Main program
 if __name__ == "__main__":
-    player_name = input("Enter your name: ")
+    # player_name = input("Enter your name: ")
+    player_name = get_player_name(screen)
     game = Game(player_name)
     game.running()
