@@ -19,6 +19,9 @@ The game rewards speed with points, and players advance to the next level by mee
 1. **Prerequisites**:
    - Python 3.11+
    - pygame 2.6+
+   - matplotlib 
+   - seaborn 
+   - pandas
 
 2. **Install dependencies**:
    ```bash
@@ -26,5 +29,5 @@ The game rewards speed with points, and players advance to the next level by mee
    
 3. **Run the game**:
   ```bash
-  python diner_game.py
+  python main.py
 
