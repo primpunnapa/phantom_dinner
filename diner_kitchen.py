@@ -6,9 +6,9 @@ from diner_dish import Dish
 class Kitchen:
     def __init__(self, pos):
         self.position = pos  # (x, y) coordinates of the kitchen
-        self.is_preparing = False  # Whether a dish is being prepared
+        self.is_preparing = False
         self.preparation_time = 3  # Time required to prepare the dish (in seconds)
-        self.preparation_start_time = 0  # Time when dish preparation started
+        self.preparation_start_time = 0
         self.current_dish = None  # The dish currently being prepared
 
     def start_preparation(self):
@@ -17,7 +17,7 @@ class Kitchen:
             print("Starting preparation...")
             self.is_preparing = True
             self.preparation_start_time = time.time()
-            dish_position = (self.position[0] + Config.get("KITCHEN_SIZE") // 4, self.position[1] + Config.get("KITCHEN_SIZE") // 4)
+            dish_position = (self.position[0] + 9 + Config.get("KITCHEN_SIZE") // 4, self.position[1] + Config.get("KITCHEN_SIZE") // 4)
             self.current_dish = Dish("Spider Soup", self.preparation_time, dish_position)
 
     def is_dish_ready(self, paused):
@@ -29,7 +29,7 @@ class Kitchen:
 
     def draw(self, screen, paused):
         """Draw the kitchen on the screen."""
-        kitchen_rect = pg.Rect(self.position[0], self.position[1], Config.get("KITCHEN_SIZE") // 2, Config.get("KITCHEN_SIZE") // 2)
+        kitchen_rect = pg.Rect(self.position[0] + 10, self.position[1], Config.get("KITCHEN_SIZE") // 2, Config.get("KITCHEN_SIZE") // 2)
         pg.draw.rect(screen, Config.get("BEIGE"), kitchen_rect)
 
         if self.is_preparing:

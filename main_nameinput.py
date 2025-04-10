@@ -11,27 +11,23 @@ class NameInputDialog(tk.Toplevel):
         self.title("Enter Your Name")
         self.geometry("300x200")
 
-        # Make modal
-        self.transient(controller)
-        self.grab_set()
+        self.transient(controller)  # Keeps the dialog on top of the parent window.
+        self.grab_set()  # block interaction outside
 
         # Widgets
-        tk.Label(self, text="Please enter your name:",
-                 font=("Arial", 12)).pack(pady=10)
+        tk.Label(self, text="Please enter your name:", font=("David", 15)).pack(pady=10)
 
-        self.name_entry = tk.Entry(self, font=("Arial", 12), width=25)
+        self.name_entry = tk.Entry(self, font=("David", 12), width=25)
         self.name_entry.pack(pady=10)
         self.name_entry.focus_set()
 
         btn_frame = tk.Frame(self)
         btn_frame.pack(pady=10)
 
-        tk.Button(btn_frame, text="Submit",
-                  command=self.submit, width=10).pack(side=tk.LEFT, padx=5)
-        tk.Button(btn_frame, text="Cancel",
-                  command=self.destroy, width=10).pack(side=tk.LEFT, padx=5)
+        tk.Button(btn_frame, text="Submit", command=self.submit, width=10).pack(side=tk.LEFT, padx=5)
+        tk.Button(btn_frame, text="Cancel", command=self.destroy, width=10).pack(side=tk.LEFT, padx=5)
 
-        self.protocol("WM_DELETE_WINDOW", self.destroy)
+        # self.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def submit(self):
         name = self.name_entry.get().strip()

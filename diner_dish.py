@@ -1,5 +1,4 @@
 import pygame as pg
-from diner_config import Config
 import time
 
 class Dish:
@@ -7,6 +6,8 @@ class Dish:
         self.name = name
         self.prep_time = prep_time
         self.position = pos
+        self.image = pg.image.load("images/dish.PNG").convert_alpha()
+        self.image = pg.transform.scale(self.image, (50, 50))
 
     def prepare(self):
         """Simulate dish preparation."""
@@ -16,10 +17,4 @@ class Dish:
 
     def draw(self, screen):
         """Draw the dish on the screen."""
-        # Draw bowl (centered at self.position)
-        pg.draw.circle(screen, Config.get("BLACK"), self.position, 12, 2)
-        # Draw soup (centered at self.position)
-        border_rect = pg.Rect(self.position[0] - 11, self.position[1] - 12, 22, 12)
-        soup_rect = pg.Rect(self.position[0] - 10, self.position[1] - 12, 20, 10)
-        pg.draw.ellipse(screen, Config.get("BLACK"), border_rect)
-        pg.draw.ellipse(screen, Config.get("RED"), soup_rect)
+        screen.blit(self.image, (self.position[0] - 27, self.position[1] - 28))

@@ -11,19 +11,15 @@ import os
 import csv
 import sys
 
-# Initialize Pygame
-pg.init()
-screen = pg.display.set_mode((Config.get("SCREEN_WIDTH"), Config.get("SCREEN_HEIGHT")))
-pg.display.set_caption("Phantom Diner")
-bg_image = pg.image.load('images/darkbg.jpg').convert_alpha()
-bg_image = pg.transform.scale(bg_image, (Config.get("SCREEN_WIDTH"), Config.get("SCREEN_HEIGHT")))
-
-clock = pg.time.Clock()
-FPS = 60
 
 
 class Game:
-    def __init__(self, player_name):
+    def __init__(self, player_name, screen):
+        self.screen = screen
+        self.bg_image = pg.image.load('images/darkbg.jpg').convert_alpha()
+        self.bg_image = pg.transform.scale(self.bg_image,
+                                           (Config.get("SCREEN_WIDTH"),
+                                            Config.get("SCREEN_HEIGHT")))
         self.player = Player(player_name)
         self.tables = [Table((350, 250)), Table((550, 250)), Table((350, 350)), Table((550, 350))]
         self.customers = []  # Customers currently seated at tables
@@ -66,8 +62,9 @@ class Game:
         self.kitchen.current_dish = None
 
         # Reset the player's state
-        self.player.current_dish = None
-        self.player.is_busy = False
+        self.player.set_current_dish(None)
+        self.player.set_is_busy(False)
+        self.player.set_position(Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2)
 
     def place_customer(self):
         """Add a new customer to the waiting list or seat them at an available table."""
@@ -124,13 +121,13 @@ class Game:
 
     def near_kitchen(self, player):
         """Check if the player is near the kitchen."""
-        px, py = player.positions
+        px, py = player.get_position()
         kx, ky = self.kitchen.position
         return abs(px - kx) < 50 and abs(py - ky) < 50  # Adjust range as needed
 
     def near_table(self, player, table):
         """Check if the player is near a table."""
-        px, py = player.positions
+        px, py = player.get_position()
         tx, ty = table.position
         return abs(px - tx) < 50 and abs(py - ty) < 50  # Adjust range as needed
 
@@ -145,8 +142,8 @@ class Game:
             return
 
         # If near the kitchen and the dish is ready → Pick up the dish
-        if self.near_kitchen(self.player) and self.kitchen.is_dish_ready(self.paused) and self.player.current_dish is None:
-            self.player.current_dish = self.kitchen.current_dish  # Player picks up the dish
+        if self.near_kitchen(self.player) and self.kitchen.is_dish_ready(self.paused) and self.player.get_current_dish() is None:
+            self.player.set_current_dish(self.kitchen.current_dish) # Player picks up the dish
             self.kitchen.is_preparing = False  # Reset kitchen
             self.kitchen.current_dish = None  # Remove dish from kitchen
             print("Dish picked up!")
@@ -154,11 +151,11 @@ class Game:
 
         # If holding a dish and near a table with a waiting customer → Serve the dish
         for t in self.tables:
-            if self.near_table(self.player, t) and self.player.current_dish and t.order_status == "waiting":
+            if self.near_table(self.player, t) and self.player.get_current_dish() and t.order_status == "waiting":
                 t.order_status = "served"
-                t.dish = self.player.current_dish   # Place the dish on the table
+                t.dish = self.player.get_current_dish()   # Place the dish on the table
                 t.dish.position = (t.position[0] + Config.get("TABLE_SIZE") // 2, t.position[1] + Config.get("TABLE_SIZE") // 2)
-                self.player.current_dish = None     # Remove dish from player
+                self.player.set_current_dish(None)     # Remove dish from player
                 self.score += 10                    # Increase score for serving a dish
                 self.dishes_served += 1             # Increment dishes served
 
@@ -205,7 +202,7 @@ class Game:
 
     def draw(self):
         """Draw all game objects on the screen."""
-        screen.blit(bg_image, (0, 0))
+        self.screen.blit(self.bg_image, (0, 0))
 
         for table in self.tables:
             table.draw(self.screen)
@@ -217,15 +214,9 @@ class Game:
         self.draw_waiting_customers()
 
         # Draw the pause button
-        pause_button_rect = self.ui.draw_pause_button(self.paused)
-        if self.paused:
-            font = pg.font.Font(None, 48)
-            paused_text = font.render("Paused", True, Config.get("WHITE"))
-            text_x = Config.get("SCREEN_WIDTH") // 2 - paused_text.get_width() // 2
-            text_y = Config.get("SCREEN_HEIGHT") // 2 - paused_text.get_height() // 2
-            self.screen.blit(paused_text, (text_x, text_y))
+        pause_button_rect, resume_button_rect = self.ui.draw_pause_screen(self.paused)
 
-        return pause_button_rect
+        return pause_button_rect, resume_button_rect
 
     def wait_for_enter(self):
         """Wait for the player to press enter."""
@@ -266,115 +257,55 @@ class Game:
 
     def running(self):
         """Run the main game loop."""
+        clock = pg.time.Clock()
+        FPS = 60
+
         while self.run:
             clock.tick(FPS)
-
-            # Draw background, game objects
-            pause_button_rect = self.draw()
+            pause_button_rect, resume_button_rect = self.draw()
 
             # Handle events
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    self.run = False
                     self.save_statistics()
                     pg.quit()
-                    sys.exit()
-                    # exit the loop immediately
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    self.handle_spacebar()  # Handle spacebar actions
-                    SoundEffect.get_instance().play_sound("press")
+                    return False  # Signal to close the game
 
-                if event.type == pg.MOUSEBUTTONDOWN:  # Handle mouse clicks
-                    if pause_button_rect.collidepoint(event.pos):  # Check if the pause button is clicked
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_SPACE:
+                        self.handle_spacebar()
+                        SoundEffect.get_instance().play_sound("press")
+                    elif event.key == pg.K_ESCAPE:  # Add escape key to quit
+                        self.save_statistics()
+                        pg.quit()
+                        return False
+
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if pause_button_rect.collidepoint(event.pos) and not self.paused:
+                        self.toggle_pause()
+                        SoundEffect.get_instance().play_sound("click")
+                    elif self.paused and resume_button_rect and resume_button_rect.collidepoint(event.pos):
                         self.toggle_pause()
                         SoundEffect.get_instance().play_sound("click")
 
-            # If the game is quitting, break the main loop
-            if not self.run:
-                break
-
             # Update game state if not paused
             if not self.paused:
-                # Get the state of all keys
                 keys = pg.key.get_pressed()
-
-                # Update player position based on keys pressed
                 self.player.move(keys)
-
-                # Place new customers and seat waiting customers
                 self.place_customer()
-
-                # Update customers' patience meters
                 self.update_customers()
-
-                # Check level progress
                 self.check_level_progress()
 
                 # Update timer
-                self.time_left -= 1 / 60  # Decrease time by 1 second per frame
+                self.time_left -= 1 / 60
                 if self.time_left <= 0:
                     self.check_level_progress()
 
-            # Update display
             pg.display.update()
 
-        # Quit the game
-        pg.quit()
+            # Additional check for pygame window close
+            if not pg.get_init():
+                return False
 
-def get_player_name(screen):
-    """Simple text input box to get player name."""
-    font = pg.font.Font(None, 32)
-    input_box = pg.Rect(Config.get("SCREEN_WIDTH") // 2 - 100, Config.get("SCREEN_HEIGHT") // 2 - 20, 200, 40)
-    color_inactive = pg.Color('lightskyblue3')
-    color_active = pg.Color('dodgerblue2')
-    color = color_inactive
-    active = False
-    text = ''
-    done = False
+        return True  # Signal game completed normally
 
-    while not done:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            if event.type == pg.MOUSEBUTTONDOWN:
-                # Toggle active if clicked on input box
-                active = input_box.collidepoint(event.pos)
-                color = color_active if active else color_inactive
-            if event.type == pg.KEYDOWN:
-                if active:
-                    if event.key == pg.K_RETURN:
-                        done = True
-                    elif event.key == pg.K_BACKSPACE:
-                        text = text[:-1]
-                    else:
-                        text += event.unicode
-
-        screen.fill((30, 30, 30))
-        # Render the current text.
-        txt_surface = font.render(text, True, color)
-        # Resize the box if the text is too long.
-        width = max(200, txt_surface.get_width() + 10)
-        input_box.w = width
-        # Blit the text.
-        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
-        # Blit the input box rect.
-        pg.draw.rect(screen, color, input_box, 2)
-
-        # Render instructions
-        instr = font.render("Enter your name and press ENTER", True, (255, 255, 255))
-        screen.blit(instr, (
-        Config.get("SCREEN_WIDTH") // 2 - instr.get_width() // 2, Config.get("SCREEN_HEIGHT") // 2 - 60))
-
-        pg.display.flip()
-        pg.time.Clock().tick(30)
-
-    return text if text.strip() != '' else "Player"
-
-
-# Main program
-if __name__ == "__main__":
-    # player_name = input("Enter your name: ")
-    player_name = get_player_name(screen)
-    game = Game(player_name)
-    game.running()

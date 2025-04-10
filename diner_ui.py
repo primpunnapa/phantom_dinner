@@ -89,6 +89,13 @@ class UI:
 
         return button_rect  # Return the button's rectangle for click detection
 
+    def draw_resume_button(self, screen):
+        resume_img = pg.image.load("images/resume.PNG").convert_alpha()
+        x = Config.get("SCREEN_WIDTH") // 2 - 95
+        y = Config.get("SCREEN_HEIGHT") // 2 + 30
+        screen.blit(resume_img, (x, y))
+        return pg.Rect(x, y, 200, 200)
+
     def draw_game_over(self, score):
         """Display the Game Over screen and wait for the player to press enter."""
         tmp_opacity = pg.Surface((Config.get("SCREEN_WIDTH"), Config.get("SCREEN_HEIGHT")), pg.SRCALPHA)
@@ -152,3 +159,27 @@ class UI:
 
         # Update the display
         pg.display.update()
+
+    def draw_pause_screen(self, paused):
+        pause_button_rect = self.draw_pause_button(paused)
+        resume_button_rect = None
+
+        if paused:
+            tmp_opacity = pg.Surface((Config.get("SCREEN_WIDTH"), Config.get("SCREEN_HEIGHT")), pg.SRCALPHA)
+            tmp_opacity.fill((0, 0, 0, 128))
+
+            tmp = pg.Surface((Config.get("SCREEN_WIDTH"), Config.get("SCREEN_HEIGHT")), pg.SRCALPHA)
+            tmp.fill((0, 0, 0, 0))
+
+            self.screen.blit(tmp_opacity, (0, 0))
+
+            font = pg.font.Font(None, 48)
+            paused_text = font.render("PAUSED", True, Config.get("WHITE"))
+            rect = paused_text.get_rect(center=(Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2))
+
+            tmp.blit(paused_text, rect)
+            self.screen.blit(tmp_opacity, (0, 0))
+            self.screen.blit(tmp, (0, 0))
+            resume_button_rect = self.draw_resume_button(self.screen)
+
+        return pause_button_rect, resume_button_rect
