@@ -1,5 +1,6 @@
-pygame==2.6.1
-numpy==2.2.4
-matplotlib
-seaborn
-pandas
+pygame>=2.6.1
+numpy>=2.2.4
+matplotlib>=3.10.1
+seaborn>=0.13.2
+pandas>=2.2.3
+pillow>=11.1.0

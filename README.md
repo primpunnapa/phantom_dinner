@@ -6,8 +6,8 @@ The player must take orders and deliver dishes before the customers lose patienc
 The game rewards speed with points, and players advance to the next level by meeting score targets.
 
 ## HOW TO PLAY
-* Move with **Arrow Keys**
-* **SPACE** to interact (Pick up dish and Serve customer):  
+* **Move** with Arrow Keys ← ↑ → ↓
+* **Interact** with SPACEBAR (Pick up dish and Serve customer):  
   1. Start cooking at kitchen  
   2. Pick up prepared dishes  
   3. Serve customers  
@@ -16,18 +16,32 @@ The game rewards speed with points, and players advance to the next level by mee
 
 ## Installation
 
-1. **Prerequisites**:
-   - Python 3.11+
-   - pygame 2.6+
-   - matplotlib 
-   - seaborn 
-   - pandas
+### Recommended: Using Virtual Environment
+1. **Create and activate virtual environment**:
+    ```bash
+    # Windows
+    python -m venv venv
+    venv\Scripts\activate
+    
+    # macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
+2. **Requirement**:
+   - Python 3.11+
+   - Packages:
+     - pygame 2.6+
+     - matplotlib 
+     - seaborn 
+     - pandas
+     - numpy
+     - pillow
+
+3. **Install dependencies**:
+    ```bash
+    pip install -r requirements.txt
    
-3. **Run the game**:
-  ```bash
-  python main.py
+4. **Run the game**:  
+    ```bash
+    python main.py
 
