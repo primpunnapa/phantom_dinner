@@ -99,7 +99,7 @@ class MainMenuFrame(ttk.Frame):
         NameInputDialog(self.controller)
 
     def show_statistics(self):
-        self.controller.show_frame(StatisticsFrame)
+        StatisticsFrame(self.controller)
 
     def show_manual(self):
         ManualWindow(self.controller)

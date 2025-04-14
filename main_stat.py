@@ -3,16 +3,21 @@ from tkinter import ttk
 from main_table import StatisticsManager
 from main_graph import GraphGenerator
 
-class StatisticsFrame(ttk.Frame):
-    def __init__(self, parent, controller):
-        super().__init__(parent)
+class StatisticsFrame(tk.Toplevel):
+    def __init__(self, controller):
+        super().__init__(controller)
         self.controller = controller
+        self.title("Statistics")
+        self.geometry("800x600")
+
         self.stats_manager = StatisticsManager()
         self.graph_generator = GraphGenerator(self.stats_manager)
 
-        # Back button
-        back_button = ttk.Button(self, text="Back",  command=lambda: self.controller.show_frame("MainMenuFrame"))
-        back_button.pack(anchor="nw", padx=10, pady=10)
+        self.transient(controller)
+        self.grab_set()
+
+        # close button
+        ttk.Button(self, text="Quit", command=self.destroy).pack(anchor="nw", padx=10, pady=10)
 
         # Create notebook for tabs
         self.notebook = ttk.Notebook(self)
@@ -71,7 +76,7 @@ class StatisticsFrame(ttk.Frame):
     def create_numerical_stats_tab(self):
         """Tab with numerical statistics"""
         tab = ttk.Frame(self.notebook)
-        self.notebook.add(tab, text="Numerical Stats")
+        self.notebook.add(tab, text="Statistical data")
 
         stats = self.stats_manager.get_numerical_stats()
         if stats is None:
@@ -87,7 +92,12 @@ class StatisticsFrame(ttk.Frame):
 
         for feature, values in stats.items():
             for stat_name, stat_value in values.items():
-                tree.insert("", "end", values=(feature, stat_name, round(stat_value, 2)))
+                if isinstance(stat_value, dict):  # per-level stats
+                    parent_id = tree.insert("", "end", values=(feature, stat_name, ""))
+                    for level, val in stat_value.items():
+                        tree.insert(parent_id, "end", values=(f"Level {level}", "Mean", round(val, 2)))
+                else:
+                    tree.insert("", "end", values=(feature, stat_name, round(stat_value, 2)))
 
     def create_graphs_tab(self):
         """Tab with graphs"""

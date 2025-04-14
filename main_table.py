@@ -48,6 +48,10 @@ class StatisticsManager:
         if self.__statistics_df.empty:
             return None
 
+        # # haunt and dishes per level
+        haunt_per_level = self.__statistics_df.groupby('Level')['Haunt Events']
+        dishes_per_level = self.__statistics_df.groupby('Level')['Dishes Served']
+
         return {
             "Score": {
                 "Mean": self.__statistics_df['Score'].mean(),
@@ -61,10 +65,14 @@ class StatisticsManager:
                 "Max": self.__statistics_df['Waiting Time'].max()
             },
             "Haunt Events": {
-                "Total": self.__statistics_df['Haunt Events'].sum(),
-                "Mean per level": self.__statistics_df['Haunt Events'].mean()
+                "Total": haunt_per_level.sum().to_dict(),
+                "Mean per level": haunt_per_level.mean().to_dict()
+                # "Total": self.__statistics_df['Haunt Events'].sum(),
+                # "Mean per level": self.__statistics_df['Haunt Events'].mean()
             },
             "Dishes Served": {
-                "Average per level": self.__statistics_df['Dishes Served'].mean()
+                "Average per level": dishes_per_level.mean().to_dict()
+                # "Average per level": self.__statistics_df['Dishes Served'].mean()
+
             }
         }
