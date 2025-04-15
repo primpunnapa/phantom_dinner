@@ -1,8 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
 from main_menu import MainMenuFrame
-from main_stat import StatisticsFrame
-import pygame as pg
 
 
 class PhantomDinerApp(tk.Tk):

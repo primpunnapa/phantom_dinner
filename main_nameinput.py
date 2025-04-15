@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 import pygame as pg
 from diner_game import Game
 

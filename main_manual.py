@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk, scrolledtext
 from main_nameinput import NameInputDialog
 from PIL import Image, ImageTk
 
@@ -34,7 +33,7 @@ class ManualWindow(tk.Toplevel):
         # self.update_image()
         self.bind("<Configure>", self.update_image)
 
-    def update_image(self, event=None):
+    def update_image(self):
         width = self.winfo_width()
         height = self.winfo_height() - 50  # Leave room for buttons
 

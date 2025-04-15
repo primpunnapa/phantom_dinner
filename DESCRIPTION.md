@@ -83,24 +83,38 @@ Show waiting customers at the bottom left of the screen.
 Role: Represents the ghost waiter.  
 2. **Customer**  
 Role: Represents a ghost customer at a table.
-3. **Table**
+3. **Table**  
 Role: Represents a table in the haunted diner.
 4. **Chair**  
 Role : represents a chair at a table.
-5. **Dish**
+5. **Dish**  
 Role: Represents a dish that can be served.
-6. **Game**
+6. **Game**  
 Role: Manages the overall game state.
-7. **Kitchen**
+7. **Kitchen**  
 Role: Represents the kitchen area where dishes are prepared.
-8. **Config**
+8. **Config**  
 Role: Keep the constants used in the game.
-9. **AnimatedSprite**
+9. **AnimatedSprite**  
 Role: handles the animation of sprites by loading and displaying a sequence of frames.
-10. **UI**
+10. **UI**  
 Role : handles the user interface, including displaying the score, time, and level.
-11. **SoundEffect**
+11. **SoundEffect**  
 Role : handles the sound of the game
+12. **PhantomDinerApp**  
+Role : Contains the main game container, Manages frame switching between different views
+13. **MainMenuFrame**  
+Role : Main menu screen, Provides buttons to start game, view stats, manual, or quit
+14. **NameInputDialog**  
+Role : Modal dialog for player name input, Launches the Pygame game window, Bridges Tkinter and Pygame interfaces
+15. **StatisticsFrame**  
+Role : Displays game statistics in tabbed view,Shows player stats, overall stats, and graphs
+16. **StatisticsManager**  
+Role : Manages game statistics data, Loads/saves CSV data, Calculates aggregates (max scores, averages, etc.)
+17. **GraphGenerator**  
+Role : Creates visualization plots, Handles boxplots, bar charts, scatter plots, and pie charts
+18. **ManualWindow**  
+Role : Interactive game manual, Shows image-based instructions, Navigation between manual pages
 
 ### 3.3 Algorithms Involved
 1. Timer-Based Mechanics:  
