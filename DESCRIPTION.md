@@ -217,6 +217,6 @@ Display the player with highest score and score of current player
 
 ## 6. Document version
 Version: 5.0
-Date: 14 Aprill 2025
+Date: 14 April 2025
 
 

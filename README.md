@@ -45,3 +45,6 @@ The game rewards speed with points, and players advance to the next level by mee
     ```bash
     python main.py
 
+### UML
+![UML](images/uml.png)
+
