@@ -204,6 +204,16 @@ Display the player with highest score and score of current player
 | 5 (7 April)  | Create graph and statistical table           |
 | 6 (14 April) | Submission week (Draft)                      |
 
+### Planning submission
+| Week              | Goals                                                                                   |
+|-------------------|------------------------------------------------------------------------------------------|
+| 26 March - 2 April| - Complete all game logics<br>- Collect statistical data<br>- Create statistical table  |
+| 3 April - 9 April | - Decorate game and develop visualization<br>- Implement 2 graphs and put in Tkinter    |
+| 10 April - 16 April| - Implement all graphs and put in Tkinter<br>- Develop project<br>- Submit draft        |
+| 17 April - 23 April| - Revise project<br>- Complete game project<br>- Complete documentation                 |
+| 24 April - 11 May | - Submit project                                                                         |
+
+
 
 ## 6. Document version
 Version: 5.0
