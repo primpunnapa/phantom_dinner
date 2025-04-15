@@ -116,6 +116,8 @@ Role : Creates visualization plots, Handles boxplots, bar charts, scatter plots,
 18. **ManualWindow**  
 Role : Interactive game manual, Shows image-based instructions, Navigation between manual pages
 
+![UML](images/uml.png)
+
 ### 3.3 Algorithms Involved
 1. Timer-Based Mechanics:  
 Each level lasts 1 minute, with the timer increasing by 10 seconds every fourth level.
