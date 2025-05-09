@@ -4,57 +4,58 @@ In Phantom Diner, players act as a ghost waiter in a haunted diner. Ghostly cust
 
 **Mechanics:**
 
-**Ghost Customers:**  
-* Arrive at random tables and place orders for spooky dishes.
-* Have a "patience meter" that decreases over time. The patience meter decreases by 5% per level until it reaches the minimum patience decrease. This will ensure that the game remains challenging but fair at higher levels.  
-**Player Actions:** 
-* Take orders and deliver dishes.  
-* Earn points for serving customers quickly (10 points per serving).  
-Score and Level Progression:
-* Players must achieve a minimum score (e.g., 100 points) to advance to the next level.
-* Each level lasts 1 minute, with the timer increasing by 10 seconds every fourth level.  
-**Kitchen Mechanics:**
-* Players must go to the kitchen to prepare dishes.
-* Dishes take a fixed time to prepare (e.g., 3 seconds).  
-**Haunt Events:**
-* If a customer’s patience meter reaches zero, they leave, and the player loses points.
+**Ghost Customers:**    
+ - Arrive at random tables and place orders for spooky dishes.  
+ - Have a "patience meter" that decreases over time. 
+ - The patience meter decreases by 5% per level until it reaches the minimum patience decrease. This will ensure that the game remains challenging but fair at higher levels.    
+**Player Actions:**  
+ - Take orders and deliver dishes.    
+ - Earn points for serving customers quickly (10 points per serving).   
+**Score and Level Progression:**  
+ - Players must achieve a minimum score (e.g., 100 points) to advance to the next level.  
+ - Each level lasts 1 minute, with the timer increasing by 10 seconds every fourth level.  
+**Kitchen Mechanics:**  
+ - Players must go to the kitchen to prepare dishes.  
+ - Dishes take a fixed time to prepare (e.g., 3 seconds).    
+**Haunt Events:**  
+ - If a customer’s patience meter reaches zero, they leave, and the player loses points.
 
-**Functionality:**  
-**Real-Time Gameplay:**  
-* Multiple ghost customers arrive and place orders.  
+**Functionality:**.   
+**Real-Time Gameplay:**    
+ - Multiple ghost customers arrive and place orders.  
 **Visual Feedback:**  
-* Patience meters, orders, and waiting customers are displayed.  
+ - Patience meters, orders, and waiting customers are displayed.  
 **Score Tracking and Level Progression:**  
-* Players earn points for serving customers quickly.  
-* Players must meet score targets to advance to the next level.  
+ - Players earn points for serving customers quickly.  
+ - Players must meet score targets to advance to the next level.    
 
 ## 2. Project Review
-**Existing Project:**  
-Diner Dash  is a popular time-management game where players act as a waitress in a busy diner.
-**Improvements :**  
-**Simplified Mechanics:**  
-Focus on core gameplay: serving dishes and managing customer patience.
-**Statistical Tracking:**  
-Track key metrics like score, waiting time, dishes served, and haunt events.
-Analyze player performance using visualizations (e.g., bar charts, line graphs).
-**Level Progression with Score Targets:**  
-Players must achieve a minimum score (e.g., 100 points) within a time limit to advance.  
-**Haunt Events:**  
-Customers leave if their patience runs out, and the player loses points.
-**Supernatural Theme:**  
-Replace human customers and dishes with ghostly customers and spooky dishes.
+**Existing Project:**   
+- Diner Dash  is a popular time-management game where players act as a waitress in a busy diner.  
+**Improvements :**    
+**Simplified Mechanics:**    
+- Focus on core gameplay: serving dishes and managing customer patience.  
+**Statistical Tracking:**    
+- Track key metrics like score, waiting time, dishes served, and haunt events.  
+- Analyze player performance using visualizations (e.g., bar charts, line graphs).  
+**Level Progression with Score Targets:**    
+- Players must achieve a minimum score (e.g., 100 points) within a time limit to advance.    
+**Haunt Events:**    
+- Customers leave if their patience runs out, and the player loses points.  
+**Supernatural Theme:**    
+- Replace human customers and dishes with ghostly customers and spooky dishes.  
 
 ## 3. Programming Development
 ### 3.1 Game Concept
 **Objectives**  
-Serve Customers Quickly:
-Take orders and deliver dishes before customers lose patience.
-Earn Points:
-Score points by serving customers quickly.
-Advance Through Levels:
-Achieve the minimum score within the time limit to unlock the next level.
-Avoid Haunt Events:
-Prevent customers from leaving by serving them before their patience runs out.
+Serve Customers Quickly:  
+- Take orders and deliver dishes before customers lose patience.  
+Earn Points:    
+- Score points by serving customers quickly.  
+Advance Through Levels:    
+- Achieve the minimum score within the time limit to unlock the next level.  
+Avoid Haunt Events:    
+- Prevent customers from leaving by serving them before their patience runs out.
 
 **Key Features:**  
 #### Ghost Customers:  
@@ -116,7 +117,7 @@ Role : Creates visualization plots, Handles boxplots, bar charts, scatter plots,
 18. **ManualWindow**  
 Role : Interactive game manual, Shows image-based instructions, Navigation between manual pages
 
-![UML](images/uml.png)
+**UML :** [UML](https://github.com/primpunnapa/phantom_dinner/blob/main/images/uml.png)
 
 ### 3.3 Algorithms Involved
 1. Timer-Based Mechanics:  
@@ -146,9 +147,8 @@ The name of the player.
 ### 4.2 Data Recording Method
 Data will be stored in a CSV file.  
 Example CSV structure:  
-Player,Score,Waiting Time,Haunt Events,Level,Dish Served
-Player1,300,10.50,5,16,50
-Player2,100,10,10,3,30
+Player,Score,Waiting Time,Haunt Events,Level,Dish Served  
+Player1,300,10.50,5,16,50  
 
 ### 4.3 Data Analysis Report
 
@@ -186,14 +186,12 @@ Display the player with the highest score and score of current player
 
 ### Graph
 
-| Feature Name                                    | Graph Objective                             | Graph Type   | X-axis         | Y-axis                   |
-|-------------------------------------------------|---------------------------------------------|--------------|----------------|--------------------------|
-| Boxplot of score                                | Show score distribution across levels       | Boxplot      | Level          | Score                    |
-| Bar graph of dishes served per level            | Show dish volume across levels              | Bar graph    | Level          | Average dishes per level |
-| Scatter plot between Haunt events and wait time | Analyze haunt events-wait time relationship | Scatter Plot | Waiting time   | Haunt events count       |
-| Level Progression Pie Chart                     | Show level progression rate                 | Pie Chart    | Level reached  | % of players             |
-
-
+| Feature Name                                    | Graph Objective                             | Graph Type   | X-axis                           | Y-axis                   |
+|-------------------------------------------------|---------------------------------------------|--------------|----------------------------------|--------------------------|
+| Boxplot of score                                | Show score distribution across levels       | Boxplot      | Level                            | Score                    |
+| Bar graph of dishes served per level            | Show dish volume across levels              | Bar graph    | Level                            | Average dishes per level |
+| Scatter plot between Haunt events and wait time | Analyze haunt events-wait time relationship | Scatter Plot | Waiting time                     | Haunt events count       |
+| Level Progression Pie Chart                     | Show level progression rate                 | Pie Chart    | Highest Level reached (sections) | compare to all players (%) |
 
 ## 5. Project Timeline  
 | Week         | Task                                         |
@@ -205,21 +203,10 @@ Display the player with the highest score and score of current player
 | 5 (7 April)  | Create graph and statistical table           |
 | 6 (14 April) | Submission week (Draft)                      |
 
-### Planning submission
-| Week              | Goals                                                                                   |
-|-------------------|------------------------------------------------------------------------------------------|
-| 26 March - 2 April| - Complete all game logics<br>- Collect statistical data<br>- Create statistical table  |
-| 3 April - 9 April | - Decorate game and develop visualization<br>- Implement 2 graphs and put in Tkinter    |
-| 10 April - 16 April| - Implement all graphs and put in Tkinter<br>- Develop project<br>- Submit draft        |
-| 17 April - 23 April| - Revise project<br>- Complete game project<br>- Complete documentation                 |
-| 24 April - 11 May | - Submit project                                                                         |
-
-
-
 ## 6. Document version
 Version: 6.0
 Date: 11 May 2025
-
+                                                              
 ## 7. Sources
 - images : 
   - Player and Customer : Get inspired by [DEADPIXELS](https://www.deadpixels.club/)
@@ -231,9 +218,3 @@ Date: 11 May 2025
 - Features : Completing all key features and functionality.
 - OOP : Adding more classes. The final version has 18 classes.
 - Statistical data : Adjust the table by only showing Mean, Median, SD, Min, Max of score, Waiting time, Haunt Events and Dish served.
-
-
-
-
-
-
