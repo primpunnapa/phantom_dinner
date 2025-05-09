@@ -11,7 +11,7 @@ class MainMenuFrame(ttk.Frame):
         self.controller = controller
 
         # Load background image
-        self.original_image = Image.open("images/wbutton.png")
+        self.original_image = Image.open("images/cover.png")
         self.bg_image = ImageTk.PhotoImage(self.original_image)
 
         # Background label

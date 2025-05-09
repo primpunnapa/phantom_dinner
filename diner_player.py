@@ -8,8 +8,8 @@ class Player:
         self.__name = name
         self.__speed = Config.get("PLAYER_SPEED")
         self.__positions = [Config.get("SCREEN_WIDTH") // 2, Config.get("SCREEN_HEIGHT") // 2]
-        self.__normal_animation = AnimatedSprite("images/player_frame", 100, scale=(0.25, 0.25))
-        self.__carrying_animation = AnimatedSprite("images/player_served", 100, scale=(0.25, 0.25))
+        self.__normal_animation = AnimatedSprite("images/player_frame", 200, scale=(0.25, 0.25))
+        self.__carrying_animation = AnimatedSprite("images/player_served", 200, scale=(0.25, 0.25))
         self.__current_animation = self.__normal_animation
         self.__is_busy = False
         self.__current_dish = None

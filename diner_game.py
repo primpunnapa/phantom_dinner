@@ -16,7 +16,7 @@ import sys
 class Game:
     def __init__(self, player_name, screen):
         self.screen = screen
-        self.bg_image = pg.image.load('images/darkbg.jpg').convert_alpha()
+        self.bg_image = pg.image.load('images/bg.PNG').convert_alpha()
         self.bg_image = pg.transform.scale(self.bg_image,
                                            (Config.get("SCREEN_WIDTH"),
                                             Config.get("SCREEN_HEIGHT")))
@@ -192,13 +192,15 @@ class Game:
                 if not self.ui.draw_game_over(self.score):  # Display Game Over screen
                     self.run = False  # Quit the game if the player closes the window
                     pg.quit()
-                    sys.exit()
+                    # sys.exit()
+                    return False
                 else:
                     # Restart the game
                     self.level = 1
                     self.score = 0
                     self.time_left = 60
                     self.reset_game_state()
+        return True
 
     def draw(self):
         """Draw all game objects on the screen."""
@@ -308,4 +310,5 @@ class Game:
                 return False
 
         return True  # Signal game completed normally
+
 

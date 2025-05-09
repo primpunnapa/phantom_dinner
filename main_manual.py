@@ -9,7 +9,7 @@ class ManualWindow(tk.Toplevel):
         self.controller = controller
         self.title("Game Manual")
         self.geometry("800x600")
-        self.images = ["images/manual/manual1.png", "images/manual/manual2.png", "images/manual/manual3.png", "images/manual/manual4.png"]
+        self.images = ["images/manual/manual1.1.png", "images/manual/manual2.1.png", "images/manual/manual3.1.png", "images/manual/manual4.1.png"]
         self.index = 0
 
         # Load and show the first image
@@ -17,7 +17,7 @@ class ManualWindow(tk.Toplevel):
         self.image_label.pack(fill=tk.BOTH, expand=True)
 
         self.transient(controller)  # Keeps the dialog on top of the parent window.
-        self.grab_set()  # block interaction outside
+        self.grab_set()             # block interaction outside
 
         btn_frame = tk.Frame(self)
         btn_frame.pack(pady=10)
@@ -30,8 +30,8 @@ class ManualWindow(tk.Toplevel):
         self.next_btn.pack(side=tk.RIGHT, padx=10)
         self.play_btn.pack(side=tk.RIGHT, padx=10)
 
-        # self.update_image()
-        self.bind("<Configure>", self.update_image)
+        self.update_image()
+        self.bind("<Configure>", lambda e: self.update_image())
 
     def update_image(self):
         width = self.winfo_width()

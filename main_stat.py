@@ -16,9 +16,6 @@ class StatisticsFrame(tk.Toplevel):
         self.transient(controller)
         self.grab_set()
 
-        # close button
-        ttk.Button(self, text="Quit", command=self.destroy).pack(anchor="nw", padx=10, pady=10)
-
         # Create notebook for tabs
         self.notebook = ttk.Notebook(self)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
@@ -27,6 +24,11 @@ class StatisticsFrame(tk.Toplevel):
         self.create_player_stats_tab()
         self.create_numerical_stats_tab()
         self.create_graphs_tab()
+
+        # self.protocol("WM_DELETE_WINDOW", lambda: (self.grab_release(), self.destroy()))
+        # self.bind("<Escape>", lambda e: (self.grab_release(), self.destroy()))
+        self.protocol("WM_DELETE_WINDOW",
+                              lambda: [self.graph_generator.close_figures(), self.destroy()])
 
     def create_player_stats_tab(self):
         """Tab with player statistics"""
@@ -65,10 +67,10 @@ class StatisticsFrame(tk.Toplevel):
             frame3 = ttk.LabelFrame(tab, text="Latest Player")
             frame3.pack(fill=tk.X, padx=10, pady=5)
 
-            tree3 = ttk.Treeview(frame3, columns=("Name", 'Level', 'Score'), show="headings", height=2)
+            tree3 = ttk.Treeview(frame3, columns=("Name", 'Score', 'Level'), show="headings", height=2)
             tree3.heading("Name", text="Name")
-            tree3.heading("Level", text="Level")
             tree3.heading("Score", text="Score")
+            tree3.heading("Level", text="Level")
             tree3.pack(fill=tk.X, padx=10, pady=5)
 
             tree3.insert("", "end", values=(latest_player['Player'], latest_player['Score'], latest_player['Level']))
@@ -78,26 +80,44 @@ class StatisticsFrame(tk.Toplevel):
         tab = ttk.Frame(self.notebook)
         self.notebook.add(tab, text="Statistical data")
 
-        stats = self.stats_manager.get_numerical_stats()
+        stats, units = self.stats_manager.get_numerical_stats()
         if stats is None:
             label = tk.Label(tab, text="No statistics available yet")
             label.pack(pady=50)
             return
 
-        tree = ttk.Treeview(tab, columns=("Feature", "Statistical Value", "Value"), show="headings")
-        tree.heading("Feature", text="Feature")
-        tree.heading("Statistical Value", text="Statistical Value")
-        tree.heading("Value", text="Value")
+        label1 = ttk.LabelFrame(tab, text="Numerical Statistics Table", padding=(10, 5))
+        label1.pack(fill=tk.BOTH, padx=10, pady=(10, 0), anchor='w')
+
+        tree = ttk.Treeview(label1, columns=('Feature', 'Min', 'Max', 'Median', 'Average', 'Std Dev'), show='headings')
+        tree.heading('Feature', text='Feature')
+        tree.heading('Min', text='Min')
+        tree.heading('Max', text='Max')
+        tree.heading('Median', text='Median')
+        tree.heading('Average', text='Average')
+        tree.heading('Std Dev', text='Std Dev')
+
+        # Set column widths
+        tree.column('Feature', width=120, anchor='center')
+        tree.column('Min', width=100, anchor='center')
+        tree.column('Max', width=100, anchor='center')
+        tree.column('Median', width=100, anchor='center')
+        tree.column('Average', width=100, anchor='center')
+        tree.column('Std Dev', width=100, anchor='center')
+
+        # Add data to Treeview
+        for stat in stats:
+            tree.insert('', 'end', values=stat)
+
         tree.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        for feature, values in stats.items():
-            for stat_name, stat_value in values.items():
-                if isinstance(stat_value, dict):  # per-level stats
-                    parent_id = tree.insert("", "end", values=(feature, stat_name, ""))
-                    for level, val in stat_value.items():
-                        tree.insert(parent_id, "end", values=(f"Level {level}", "Mean", round(val, 2)))
-                else:
-                    tree.insert("", "end", values=(feature, stat_name, round(stat_value, 2)))
+        # Create a LabelFrame to show feature descriptions/units
+        unit_frame = ttk.LabelFrame(tab, text="Feature Units", padding=(10, 5))
+        unit_frame.pack(fill=tk.X, padx=10, pady=(10, 0), anchor='w')
+
+        for feature, unit in units.items():
+            unit_text = f"{feature}: {unit}"
+            ttk.Label(unit_frame, text=unit_text).pack(anchor='w')
 
     def create_graphs_tab(self):
         """Tab with graphs"""

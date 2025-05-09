@@ -31,6 +31,7 @@ class StatisticsManager:
                 'Level': latest['Level']
             }
         return None
+
     def get_highest_score(self):
         """Get player with highest score"""
         if not self.__statistics_df.empty:
@@ -48,31 +49,32 @@ class StatisticsManager:
         if self.__statistics_df.empty:
             return None
 
-        # # haunt and dishes per level
-        haunt_per_level = self.__statistics_df.groupby('Level')['Haunt Events']
-        dishes_per_level = self.__statistics_df.groupby('Level')['Dishes Served']
+        temp_df = self.__statistics_df.copy()
+        temp_df['New Dishes'] = self.__statistics_df.groupby('Player')['Dishes Served'].diff().fillna(self.__statistics_df['Dishes Served'])
 
-        return {
-            "Score": {
-                "Mean": self.__statistics_df['Score'].mean(),
-                "Median": self.__statistics_df['Score'].median(),
-                "Std Dev": self.__statistics_df['Score'].std(),
-                "Min": self.__statistics_df['Score'].min(),
-                "Max": self.__statistics_df['Score'].max()
-            },
-            "Waiting Time": {
-                "Average": self.__statistics_df['Waiting Time'].mean(),
-                "Max": self.__statistics_df['Waiting Time'].max()
-            },
-            "Haunt Events": {
-                "Total": haunt_per_level.sum().to_dict(),
-                "Mean per level": haunt_per_level.mean().to_dict()
-                # "Total": self.__statistics_df['Haunt Events'].sum(),
-                # "Mean per level": self.__statistics_df['Haunt Events'].mean()
-            },
-            "Dishes Served": {
-                "Average per level": dishes_per_level.mean().to_dict()
-                # "Average per level": self.__statistics_df['Dishes Served'].mean()
-
-            }
+        units = {
+            "Score": "points",
+            "Waiting Time": "seconds",
+            "Haunt Events": "events",
+            "Dish served": "dishes",
         }
+
+        features = {
+            'Score': self.__statistics_df['Score'],
+            'Waiting Time': self.__statistics_df['Waiting Time'],
+            'Haunt Events': self.__statistics_df['Haunt Events'],
+            'Dishes Served': temp_df['New Dishes']
+        }
+
+        stats = []
+        for name, values in features.items():
+
+            stats.append([
+                name,
+                min(values) if min(values) > 0 else abs(min(values)),
+                max(values),
+                round(values.median(), 2),
+                round(values.mean(), 2),
+                round(values.std(), 2) if len(values) > 1 else 0
+            ])
+        return stats, units
