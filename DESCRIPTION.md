@@ -56,27 +56,27 @@ Achieve the minimum score within the time limit to unlock the next level.
 Avoid Haunt Events:
 Prevent customers from leaving by serving them before their patience runs out.
 
-**Key Features:**
-Ghost Customers:
-Arrive at random tables and place orders.
-If no tables are available, customers wait in line.
-Player Actions:
-Move to the kitchen to prepare dishes.
-Pick up and serve dishes to customers.
-Patience Meter:
-Customers have a patience meter that decreases over time.
-If it reaches zero, they leave, and the player loses points.
-Score System:
-Players earn points for serving customers quickly.
-A minimum score (e.g., 100 points) is required to advance to the next level.
-Time-Limited Levels:
-Each level lasts 1 minute, with the timer increasing by 10 seconds every fourth level.
-Queue System:
-Customers wait in line if all tables are full.
-A random customer arrives every 5 seconds.
-Visual Feedback:
-Display customer patience meters and orders.
-Show waiting customers at the bottom left of the screen.
+**Key Features:**  
+#### Ghost Customers:  
+- Arrive at random tables and place orders.  
+- If no tables are available, customers wait in line.  
+#### Player Actions:  
+- Move to the kitchen to prepare dishes.
+- Pick up and serve dishes to customers.
+#### Patience Meter:
+- Customers have a patience meter that decreases over time.
+- If it reaches zero, they leave, and the player loses points.
+#### Score System:
+- Players earn points for serving customers quickly.
+- A minimum score (e.g., 100 points) is required to advance to the next level.
+#### Time-Limited Levels:
+- Each level lasts 1 minute, with the timer increasing by 10 seconds every fourth level.
+#### Queue System:
+- Customers wait in line if all tables are full.
+- A random customer arrives every 5 seconds.
+#### Visual Feedback:
+- Display customer patience meters and orders.
+- Show waiting customers at the bottom left of the screen.
 
 ### 3.2  Object-Oriented Programming Implementation
 1. **Player**  
@@ -132,16 +132,16 @@ Players must score at least 100 points within the time limit to proceed to the n
 ## 4. Statistical Data (Prop Stats)
 ###  4.1 Data Features
 **Score:**  
-Tracks the player’s score over time (per level).
-**Waiting Time:**
-Records the average waiting time in seconds across all customers in the session (average per level).
-**Haunt Events:**
-Number of times customers leave due to low patience (per level).
-**Dishes Served:**
-Records the total number of dishes served (per level).
-**Level:**
-Tracks the current level of the player.
-**Player’s Name:**
+Tracks the player’s score over time (per level).  
+**Waiting Time:**  
+Records the average waiting time in seconds across all customers in the session (average per level).  
+**Haunt Events:**  
+Number of times customers leave due to low patience (per level).  
+**Dishes Served:**  
+Records the total number of dishes served (per level).  
+**Level:**  
+Tracks the current level of the player.    
+**Player’s Name:**  
 The name of the player.
 ### 4.2 Data Recording Method
 Data will be stored in a CSV file.  
@@ -155,10 +155,10 @@ Player2,100,10,10,3,30
 #### Statistical Data Revision
 | Feature        | Why is it good to have this data?                                                                 | How to obtain 50 values?                                                       | Variable (and Class)              | How to display                                                                                                          |
 |----------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| **Score**       | Reflects player performance and progression. Helps analyze how well the player is doing.         | Collect the score when completing one level or quitting early.                 | `score` (from the `Game` class)   | **Statistics Table**: mean, median, min, max, std dev<br>**Graph**: Boxplot distribution per level                      |
-| **Waiting Time**| Measures customer satisfaction and player’s efficiency. Identifies gameplay bottlenecks.         | Record the waiting time for each customer and calculate the average per level. | `waiting_times` (from `Game`)     | **Statistics Table**: mean, median, min, max, std dev<br>**Graph**: Scatter plot vs. haunt level                        |
-| **Haunt Events**| Tracks how often customers leave due to low patience. Indicates time management efficiency.       | Count the number of haunt events per level.                                    | `haunt_events` (from `Game`)      | **Statistics Table**: mean, median, min, max, std dev<br>**Graph**: Scatter plot vs. waiting time                       |
-| **Dishes Served**| Measures productivity and efficiency. Analyzes how many dishes are served.                      | Record the cumulative number of dishes served per level.                       | `dishes_served` (from `Game`)     | **Statistics**: mean, median, min, max, std dev<br>**Graph**: Bar graph of average dishes served per level              |
+| **Score**       | Reflects player performance and progression. Helps analyze how well the player is doing.         | Collect the score when completing one level or quitting early.                 | `score` (from the `Game` class)   | **Statistics Table**: mean, median, min, max, SD <br>**Graph**: Boxplot distribution per level                          |
+| **Waiting Time**| Measures customer satisfaction and player’s efficiency. Identifies gameplay bottlenecks.         | Record the waiting time for each customer and calculate the average per level. | `waiting_times` (from `Game`)     | **Statistics Table**: mean, median, min, max, SD <br>**Graph**: Scatter plot vs. haunt level                            |
+| **Haunt Events**| Tracks how often customers leave due to low patience. Indicates time management efficiency.       | Count the number of haunt events per level.                                    | `haunt_events` (from `Game`)      | **Statistics Table**: mean, median, min, max, SD <br>**Graph**: Scatter plot vs. waiting time                           |
+| **Dishes Served**| Measures productivity and efficiency. Analyzes how many dishes are served.                      | Record the cumulative number of dishes served per level.                       | `dishes_served` (from `Game`)     | **Statistics**: mean, median, min, max, SD <br>**Graph**: Bar graph of average dishes served per level                  |
 | **Level**        | Tracks progression and difficulty scaling. Reflects player skill.                               | Record the level reached when completing or quitting.                          | `level` (from `Game`)             | **Statistics Table**: Highest level reached<br>**Graph**: Boxplot (score-level), Bar (dishes-level), Pie (player-level) |
 | **Player's Name**| Personalizes game experience. Tracks individual performance.                                    | Collect at the start of the game.                                              | `player_name` (from `Game`)       | **Statistics Table**: Player with highest score and highest level                                                       |
 
@@ -186,12 +186,12 @@ Display the player with the highest score and score of current player
 
 ### Graph
 
-| Feature Name                             | Graph Objective                        | Graph Type   | X-axis         | Y-axis                   |
-|------------------------------------------|----------------------------------------|--------------|----------------|--------------------------|
-| Boxplot of score                         | Show score distribution across levels  | Boxplot      | Level          | Score                    |
-| Bar graph of dishes served per level     | Show dish volume across levels         | Bar graph    | Level          | Average dishes per level |
-| Scatter plot between Haunt and wait time | Analyze haunt-wait time relationship   | Scatter Plot | Waiting time   | Haunt events count       |
-| Level Progression Pie Chart              | Show level progression rate            | Pie Chart    | Level reached  | % of players             |
+| Feature Name                                    | Graph Objective                             | Graph Type   | X-axis         | Y-axis                   |
+|-------------------------------------------------|---------------------------------------------|--------------|----------------|--------------------------|
+| Boxplot of score                                | Show score distribution across levels       | Boxplot      | Level          | Score                    |
+| Bar graph of dishes served per level            | Show dish volume across levels              | Bar graph    | Level          | Average dishes per level |
+| Scatter plot between Haunt events and wait time | Analyze haunt events-wait time relationship | Scatter Plot | Waiting time   | Haunt events count       |
+| Level Progression Pie Chart                     | Show level progression rate                 | Pie Chart    | Level reached  | % of players             |
 
 
 
@@ -220,7 +220,7 @@ Display the player with the highest score and score of current player
 Version: 6.0
 Date: 11 May 2025
 
-## 7. Source and credit
+## 7. Sources
 - images : 
   - Player and Customer : Get inspired by [DEADPIXELS](https://www.deadpixels.club/)
   - Background : Get inspired by Diner Dash background
