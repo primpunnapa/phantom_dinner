@@ -117,7 +117,8 @@ Role : Creates visualization plots, Handles boxplots, bar charts, scatter plots,
 18. **ManualWindow**  
 Role : Interactive game manual, Shows image-based instructions, Navigation between manual pages
 
-**UML :** [UML](https://github.com/primpunnapa/phantom_dinner/blob/main/images/uml.png)
+**UML :** 
+![UML](./images/uml.png)
 
 ### 3.3 Algorithms Involved
 1. Timer-Based Mechanics:  
