@@ -7,7 +7,6 @@ class PhantomDinerApp(tk.Tk):
         super().__init__()
         self.title("Phantom Diner")
         self.geometry("800x600")
-        self.minsize(800, 600)
 
         # Create container frame
         self.container = tk.Frame(self)
