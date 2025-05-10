@@ -111,7 +111,7 @@ Role : Modal dialog for player name input, Launches the Pygame game window, Brid
 15. **StatisticsFrame**  
 Role : Displays game statistics in tabbed view,Shows player stats, overall stats, and graphs
 16. **StatisticsManager**  
-Role : Manages game statistics data, Loads/saves CSV data, Calculates aggregates (max scores, averages, etc.)
+Role : Manages game statistics data, Loads CSV data, Calculates aggregates (max scores, averages, etc.)
 17. **GraphGenerator**  
 Role : Creates visualization plots, Handles boxplots, bar charts, scatter plots, and pie charts
 18. **ManualWindow**  

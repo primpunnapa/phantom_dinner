@@ -8,7 +8,7 @@ class SoundEffect:
         if SoundEffect.__instance is None:
             pg.mixer.init(frequency=44100, channels=2)
             self.__instance = self
-            print("Sound Effects Initialized")
+            # print("Sound Effects Initialized")
             self.__sounds = {
                 "move":  self.__generate_tone(0.2, 500),
                 "over": self.__generate_tone(1.0, 200),

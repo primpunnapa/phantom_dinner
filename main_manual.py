@@ -35,7 +35,7 @@ class ManualWindow(tk.Toplevel):
 
     def update_image(self):
         width = self.winfo_width()
-        height = self.winfo_height() - 50  # Leave room for buttons
+        height = self.winfo_height() - 50
 
         if width < 1 or height < 1:
             return

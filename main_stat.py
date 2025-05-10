@@ -25,8 +25,6 @@ class StatisticsFrame(tk.Toplevel):
         self.create_numerical_stats_tab()
         self.create_graphs_tab()
 
-        # self.protocol("WM_DELETE_WINDOW", lambda: (self.grab_release(), self.destroy()))
-        # self.bind("<Escape>", lambda e: (self.grab_release(), self.destroy()))
         self.protocol("WM_DELETE_WINDOW",
                               lambda: [self.graph_generator.close_figures(), self.destroy()])
 

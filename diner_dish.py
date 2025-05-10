@@ -11,9 +11,9 @@ class Dish:
 
     def prepare(self):
         """Simulate dish preparation."""
-        print(f"Preparing {self.name}...")
+        # print(f"Preparing {self.name}...")
         time.sleep(self.prep_time)
-        print(f"{self.name} is ready!")
+        # print(f"{self.name} is ready!")
 
     def draw(self, screen):
         """Draw the dish on the screen."""

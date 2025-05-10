@@ -12,8 +12,8 @@ class UI:
 
         # Calculate the position and size of the background box
         text_width, text_height = time_text.get_size()
-        box_x = Config.get("SCREEN_WIDTH") - 150 - 10  # Add padding
-        box_y = 5 - 5  # Add padding
+        box_x = Config.get("SCREEN_WIDTH") - 150 - 10
+        box_y = 0
         box_width = text_width + 30  # Add padding
         box_height = text_height + 20  # Add padding
 
@@ -32,10 +32,10 @@ class UI:
         # Calculate the position and size of the background box
         text1_width, text1_height = score_text1.get_size()
         text2_width, text2_height = score_text2.get_size()
-        box_x = 140 - 5  # Add padding
-        box_y = 5 - 5  # Add padding
-        box_width = text1_width + text2_width + 50  # Add padding
-        box_height = max(text1_height, text2_height) + 20  # Add padding
+        box_x = 140 - 5
+        box_y = 0
+        box_width = text1_width + text2_width + 50
+        box_height = max(text1_height, text2_height) + 20
 
         # Draw the background box
         pg.draw.rect(self.screen, Config.get("DARKPURPLE"), (box_x, box_y, box_width, box_height))
@@ -54,9 +54,9 @@ class UI:
         text1_width, text1_height = level_text1.get_size()
         text2_width, text2_height = level_text2.get_size()
         box_x = Config.get("SCREEN_WIDTH") // 2 - 10
-        box_y = 5 - 5  # Add padding
-        box_width = text1_width + text2_width + 30  # Add padding
-        box_height = max(text1_height, text2_height) + 20  # Add padding
+        box_y = 0
+        box_width = text1_width + text2_width + 30
+        box_height = max(text1_height, text2_height) + 20
 
         # Draw the background box
         pg.draw.rect(self.screen, Config.get("DARKBLUE"), (box_x, box_y, box_width, box_height))
@@ -129,8 +129,6 @@ class UI:
         while waiting:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    # pg.quit()
-                    # sys.exit()
                     return False  # Quit the game
                 if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
                     waiting = False

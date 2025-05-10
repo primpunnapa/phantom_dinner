@@ -16,7 +16,6 @@ class NameInputDialog(tk.Toplevel):
         self.transient(controller)
         self.grab_set()
 
-        # Widgets
         tk.Label(self, text="Please enter your name:", font=("David", 15)).pack(pady=10)
         self.name_entry = tk.Entry(self, font=("David", 12), width=25)
         self.name_entry.pack(pady=10)
@@ -65,6 +64,11 @@ class NameInputDialog(tk.Toplevel):
             if not game_completed and self.controller_alive:
                 # Game was force-closed, but main window still exists
                 self.controller.destroy()
+
+        except pg.error as e:
+            # Specifically catch pygame errors and ignore the video system message
+            if "video system not initialized" not in str(e).lower():
+                print(f"Game error: {e}")
 
         except Exception as e:
             print(f"Game error: {e}")

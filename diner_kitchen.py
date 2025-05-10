@@ -14,7 +14,7 @@ class Kitchen:
     def start_preparation(self):
         """Start preparing the dish."""
         if not self.is_preparing:
-            print("Starting preparation...")
+            # print("Starting preparation...")
             self.is_preparing = True
             self.preparation_start_time = time.time()
             dish_position = (self.position[0] + 9 + Config.get("KITCHEN_SIZE") // 4, self.position[1] + Config.get("KITCHEN_SIZE") // 4)
