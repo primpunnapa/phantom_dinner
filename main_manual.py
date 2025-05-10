@@ -24,11 +24,9 @@ class ManualWindow(tk.Toplevel):
 
         self.back_btn = tk.Button(btn_frame, text="Back", command=self.show_previous)
         self.next_btn = tk.Button(btn_frame, text="Next", command=self.show_next)
-        self.play_btn = tk.Button(btn_frame, text="Play", command=self.start_game)
 
         self.back_btn.pack(side=tk.LEFT, padx=10)
         self.next_btn.pack(side=tk.RIGHT, padx=10)
-        self.play_btn.pack(side=tk.RIGHT, padx=10)
 
         self.update_image()
         self.bind("<Configure>", lambda e: self.update_image())
@@ -54,6 +52,3 @@ class ManualWindow(tk.Toplevel):
         if self.index > 0:
             self.index -= 1
             self.update_image()
-
-    def start_game(self):
-        NameInputDialog(self.controller)
