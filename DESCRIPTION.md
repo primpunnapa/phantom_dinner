@@ -212,6 +212,7 @@ Date: 11 May 2025
 - images : 
   - Player and Customer : Get inspired by [DEADPIXELS](https://www.deadpixels.club/)
   - Background : Get inspired by Diner Dash background
+  - Resume button : From @sketchify in Canva.com
 - code:
   - Get inspired by Diner Dash 
 
@@ -219,3 +220,5 @@ Date: 11 May 2025
 - Features : Completing all key features and functionality.
 - OOP : Adding more classes. The final version has 18 classes.
 - Statistical data : Adjust the table by only showing Mean, Median, SD, Min, Max of score, Waiting time, Haunt Events and Dish served.
+
+## 9. Youtube
