@@ -187,12 +187,12 @@ Display the player with the highest score and score of current player
 
 ### Graph
 
-| Feature Name                                    | Graph Objective                             | Graph Type   | X-axis                           | Y-axis                   |
-|-------------------------------------------------|---------------------------------------------|--------------|----------------------------------|--------------------------|
-| Boxplot of score                                | Show score distribution across levels       | Boxplot      | Level                            | Score                    |
-| Bar graph of dishes served per level            | Show dish volume across levels              | Bar graph    | Level                            | Average dishes per level |
-| Scatter plot between Haunt events and wait time | Analyze haunt events-wait time relationship | Scatter Plot | Waiting time                     | Haunt events count       |
-| Level Progression Pie Chart                     | Show level progression rate                 | Pie Chart    | Highest Level reached (sections) | compare to all players (%) |
+| Feature Name                                     | Graph Objective                                      | Graph Type   | X-axis                           | Y-axis                   |
+|--------------------------------------------------|------------------------------------------------------|--------------|----------------------------------|--------------------------|
+| Boxplot of score                                 | Show score distribution across levels                | Boxplot      | Level                            | Score                    |
+| Bar graph of dishes served per level             | Show dish volume across levels                       | Bar graph    | Level                            | Average dishes per level |
+| Scatter plot between Haunt events and wait time  | Analyze haunt events-waiting time relationship       | Scatter Plot | Waiting time                     | Haunt events count       |
+| Highest Level Reached by Players pie chart       | Compare the highest level reached across all players | Pie Chart    | Highest Level reached (sections) | compare to all players (%) |
 
 ## 5. Project Timeline  
 | Week         | Task                                         |
