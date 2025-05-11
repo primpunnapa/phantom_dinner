@@ -18,7 +18,7 @@ The game rewards speed with points, and players advance to the next level by mee
 
 ### clone the respository
 
-``` git clone https://github.com/primpunnapa/phantom_dinner.git```
+```git clone https://github.com/primpunnapa/phantom_dinner.git```
 
 ### Recommended: Using Virtual Environment
 1. **Create and activate virtual environment**:
