@@ -223,3 +223,6 @@ Date: 11 May 2025
 
 ## 9. Youtube
 [LINK](https://youtu.be/ShYVp6Oo_0U)
+
+## 10. Original Proposal
+[PROPOSAL](proposalfinal.pdf)
