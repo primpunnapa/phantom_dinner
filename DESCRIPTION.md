@@ -184,6 +184,7 @@ Display the player with the highest score and score of current player
 | Waiting Time  | Mean, Median, Standard Deviation, Min, Max |
 | Haunt Events  | Mean, Median, Standard Deviation, Min, Max |
 | Dishes Served | Mean, Median, Standard Deviation, Min, Max |
+![TABLE](screenshots/visualization/table.png)
 
 ### Graph
 
@@ -193,6 +194,11 @@ Display the player with the highest score and score of current player
 | Bar graph of dishes served per level             | Show dish volume across levels                       | Bar graph    | Level                            | Average dishes per level |
 | Scatter plot between Haunt events and wait time  | Analyze haunt events-waiting time relationship       | Scatter Plot | Waiting time                     | Haunt events count       |
 | Highest Level Reached by Players pie chart       | Compare the highest level reached across all players | Pie Chart    | Highest Level reached (sections) | compare to all players (%) |
+
+![BOXPLOT](screenshots/visualization/boxplot.png)
+![BARGRAPGH](screenshots/visualization/bargraph.png)
+![SCATTERPLOT](screenshots/visualization/scatterplot.png)
+![PIECHART](screenshots/visualization/piechart.png)
 
 ## 5. Project Timeline  
 | Week         | Task                                         |
